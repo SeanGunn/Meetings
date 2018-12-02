@@ -19,8 +19,9 @@ namespace Meetings
                 MessageBox.Show(key+" is in use create a diffent one");
             else
                 Pairs.Add(key, info);
+            //Pairs.ContainsValue - for removing people from meetings
         }
-
+       
         public void RemoveHashMapAstextfile()
         {
             try
@@ -28,12 +29,11 @@ namespace Meetings
                 //Pass the filepath and filename to the StreamWriter Constructor
                 using (StreamWriter finished = new StreamWriter(@"C:\\Data.txt", false))
                 {
-                    //TODO: writes the data into here
                     int i = Pairs.Count;
                     for (int a = 0; a < i; a++)
                     {
                         String c = i.ToString();
-                        if (Pairs[c].Contains("pref") || Pairs[c].Contains("pref"))
+                        if (Pairs[c].Contains("pref") || Pairs[c].Contains("exc"))
                         {
 
                         }

@@ -48,8 +48,6 @@ namespace Meetings
             {
                 MessageBox.Show("Exception: " + A.Message);
             }
-            //TODO: create a hashmap/dict
-            //TODO: adds to the hashmap/dict
         }
 
         private void button1_Click(object sender, EventArgs e)
