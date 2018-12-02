@@ -13,6 +13,8 @@ namespace Meetings
 {
     public partial class Form1 : Form
     {
+        private HashMap Pairs;
+        //Dictionary<String, String> Pairs = new Dictionary<String, String>();
         private Users User;
         public Form1()
         {
@@ -29,17 +31,20 @@ namespace Meetings
             {
                 var sr = new StreamReader(@"C:\\Data.txt");
                 line = sr.ReadLine();
+                Pairs.Add("sean", "temp");
                 //seperates the text into each one(name-username-password-email)
                 while (line != null)
                 {
                     //Read the next line
                     line = sr.ReadLine();
+                    string[] splitString = line.Split('-');
+                    Pairs.Add(splitString[0], splitString[1]);
                     //seperates the text into each one(name-username-password-email)
                 }
                 //close the file
                 sr.Close();
             }
-            catch(Exception A)
+            catch (Exception A)
             {
                 MessageBox.Show("Exception: " + A.Message);
             }
@@ -56,20 +61,7 @@ namespace Meetings
         {
             //when form closed closes the files and saves them
             //database
-
-            //TODO: recieves the data from the hashmap/dict
-            try
-            {
-
-                //Pass the filepath and filename to the StreamWriter Constructor
-                using (StreamWriter finished = new StreamWriter(@"C:\\Data.txt", false))
-                {
-                    //TODO: writes the data into here
-                }
-            }
-            catch (Exception C)
-            {
-                MessageBox.Show("Exception: " + C.Message);
-            }
+            Pairs.RemoveHashMapAstextfile();
         }
+    }
 }

@@ -9,11 +9,13 @@ namespace Meetings
 {
     abstract class Users
     {
+        //private Dictionary<String, String> Pairs;
         protected string name;
         protected string username;
         protected string password;
         protected string email;
         protected int tempLogin = 5;
+        
         public void SetName(String value)
         {
             this.name = value;
