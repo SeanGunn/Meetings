@@ -11,15 +11,21 @@ namespace Meetings
     class HashMap
     {
         Dictionary<String, String> Pairs = new Dictionary<String, String>();
+        public HashMap()
+        {
+
+        }
+
 
         public void Add(String key, String info)
         {
-            
+            MessageBox.Show(key + info);
             if(Pairs.ContainsKey(key))
                 MessageBox.Show(key+" is in use create a diffent one");
             else
                 Pairs.Add(key, info);
             //Pairs.ContainsValue - for removing people from meetings
+            //key.IndexOf("hi");
         }
        
         public void RemoveHashMapAstextfile()
@@ -27,7 +33,7 @@ namespace Meetings
             try
             {
                 //Pass the filepath and filename to the StreamWriter Constructor
-                using (StreamWriter finished = new StreamWriter(@"C:\\Data.txt", false))
+                using (StreamWriter finished = new StreamWriter(@"C:\\DataMeetings.txt", false))
                 {
                     int i = Pairs.Count;
                     for (int a = 0; a < i; a++)

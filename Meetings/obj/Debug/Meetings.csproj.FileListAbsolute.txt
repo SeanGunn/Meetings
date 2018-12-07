@@ -1,0 +1,10 @@
+F:\Meetings\Meetings\Meetings\bin\Debug\Meetings.exe.config
+F:\Meetings\Meetings\Meetings\bin\Debug\Meetings.exe
+F:\Meetings\Meetings\Meetings\bin\Debug\Meetings.pdb
+F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.csprojAssemblyReference.cache
+F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.Form1.resources
+F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.Properties.Resources.resources
+F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.csproj.GenerateResource.cache
+F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.csproj.CoreCompileInputs.cache
+F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.exe
+F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.pdb

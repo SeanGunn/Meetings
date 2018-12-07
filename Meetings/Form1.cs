@@ -8,9 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Meetings
 {
+    //TODO: Systems constrains mmet
+    //TODO: Integrity maintained
+    //TODO: Recip may withdraw and exclude some slots
+    //TODO: DROP OUT?
     public partial class Form1 : Form
     {
         private HashMap Pairs;
@@ -19,30 +24,57 @@ namespace Meetings
         public Form1()
         {
             InitializeComponent();
+            Form1_Load();
         }
 
-        private void Form1_Load(object sender, System.EventArgs e)
+        private void Form1_Load()
         {
-
+            
+            Pairs = new HashMap();
             //when forms loads up reads the files
             //database
-            string line;
             try
             {
-                var sr = new StreamReader(@"C:\\Data.txt");
-                line = sr.ReadLine();
-                Pairs.Add("sean", "temp");
-                //seperates the text into each one(name-username-password-email)
-                while (line != null)
+                const Int32 BufferSize = 128;
+                using (var fileStream = File.OpenRead(@"F:\Meetings\Meetings\Data.txt"))
+                using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
                 {
-                    //Read the next line
-                    line = sr.ReadLine();
-                    string[] splitString = line.Split('-');
-                    Pairs.Add(splitString[0], splitString[1]);
-                    //seperates the text into each one(name-username-password-email)
+                    while (!(streamReader.EndOfStream))
+                    {
+                        var line = streamReader.ReadLine();
+
+                        string[] splitString = line.Split('#');
+                        string split0 = splitString[0];
+                        string split1 = splitString[1];
+
+                        Pairs.Add(split0, split1);
+
+                    }
+                    fileStream.Close();
+                    // Process line
                 }
+                //seperates the text into each one(name-username-password-email)
+                //while (line != null)
+                //{
+                //    //Read the next line
+                //    int a = 0;
+                //    string[] splitString = line.Split('#');
+                //    string split1 = splitString[1];
+                //    MessageBox.Show(splitString[0]);
+                //    string[] splitStringSplitAgain = split1.Split('#');
+
+                //    if(a == 0)
+                //    {
+                //        Pairs.Add(splitString[0], splitStringSplitAgain[1]);
+                //        a++;
+                //    }
+                //    MessageBox.Show(splitStringSplitAgain[1]);
+                //    Pairs.Add(splitStringSplitAgain[0], splitStringSplitAgain[1]);
+
+                //    //seperates the text into each one(name-username-password-email)
+                //}
                 //close the file
-                sr.Close();
+                
             }
             catch (Exception A)
             {
@@ -52,10 +84,10 @@ namespace Meetings
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            
         }
 
-        private void Form1_Closed(object sender, System.EventArgs e)
+        private void Form1_Closed()
         {
             //when form closed closes the files and saves them
             //database

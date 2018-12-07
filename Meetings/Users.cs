@@ -44,6 +44,7 @@ namespace Meetings
 
         public void SetEmail(String value)
         {
+            value.Trim();
             if (value.Contains("@gmail.com"))
                 this.email = value;
             else
