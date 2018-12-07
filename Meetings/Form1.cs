@@ -16,6 +16,7 @@ namespace Meetings
     //TODO: Integrity maintained
     //TODO: Recip may withdraw and exclude some slots
     //TODO: DROP OUT?
+    //TODO: SEPERATE DATA
     public partial class Form1 : Form
     {
         private HashMap Pairs;
@@ -53,27 +54,6 @@ namespace Meetings
                     fileStream.Close();
                     // Process line
                 }
-                //seperates the text into each one(name-username-password-email)
-                //while (line != null)
-                //{
-                //    //Read the next line
-                //    int a = 0;
-                //    string[] splitString = line.Split('#');
-                //    string split1 = splitString[1];
-                //    MessageBox.Show(splitString[0]);
-                //    string[] splitStringSplitAgain = split1.Split('#');
-
-                //    if(a == 0)
-                //    {
-                //        Pairs.Add(splitString[0], splitStringSplitAgain[1]);
-                //        a++;
-                //    }
-                //    MessageBox.Show(splitStringSplitAgain[1]);
-                //    Pairs.Add(splitStringSplitAgain[0], splitStringSplitAgain[1]);
-
-                //    //seperates the text into each one(name-username-password-email)
-                //}
-                //close the file
                 
             }
             catch (Exception A)
