@@ -8,3 +8,13 @@ F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.csproj.GenerateResource.cache
 F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.csproj.CoreCompileInputs.cache
 F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.exe
 F:\Meetings\Meetings\Meetings\obj\Debug\Meetings.pdb
+C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\Meetings.exe.config
+C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\Meetings.exe
+C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\Meetings.pdb
+C:\Users\sean\source\repos\Meetings\Meetings\obj\Debug\Meetings.csprojAssemblyReference.cache
+C:\Users\sean\source\repos\Meetings\Meetings\obj\Debug\Meetings.Form1.resources
+C:\Users\sean\source\repos\Meetings\Meetings\obj\Debug\Meetings.Properties.Resources.resources
+C:\Users\sean\source\repos\Meetings\Meetings\obj\Debug\Meetings.csproj.GenerateResource.cache
+C:\Users\sean\source\repos\Meetings\Meetings\obj\Debug\Meetings.csproj.CoreCompileInputs.cache
+C:\Users\sean\source\repos\Meetings\Meetings\obj\Debug\Meetings.exe
+C:\Users\sean\source\repos\Meetings\Meetings\obj\Debug\Meetings.pdb

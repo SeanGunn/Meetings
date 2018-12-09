@@ -8,19 +8,20 @@ namespace Meetings
 {
     class Init : Users
     {
-        public void SetTimeAndDateOfMeetings()
+
+        public void SetTimeAndDateOfMeetingsAndUsersForMeetings(string meetingsName, string datesAndTimesOfMeetingsAndUsers)
         {
-            //TODO: creates the meetings
+            Pairs.AddMeeting(meetingsName, datesAndTimesOfMeetingsAndUsers);
         }
 
-        public void ExtendMeetings()
+        public void ExtendMeetings(string originalMeetingsName, string newDatesAndTimes)
         {
-            //TODO: extands meetings to set day
+            Pairs.ExtendMeetings(originalMeetingsName, newDatesAndTimes);
         }
 
-        public void CancelMeetings()
+        public void CancelMeetings(string meetingsWantCanceled)
         {
-            //TODO: cleans the dict off the meetings
+            Pairs.CancelMeetings(meetingsWantCanceled);
         }
     }
 }

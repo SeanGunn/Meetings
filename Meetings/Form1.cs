@@ -37,7 +37,7 @@ namespace Meetings
             try
             {
                 const Int32 BufferSize = 128;
-                using (var fileStream = File.OpenRead(@"F:\Meetings\Meetings\Data.txt"))
+                using (var fileStream = File.OpenRead(@"C: \Users\sean\source\repos\Meetings\Data.txt"))
                 using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
                 {
                     while (!(streamReader.EndOfStream))

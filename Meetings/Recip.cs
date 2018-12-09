@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Meetings
 {
-    class Recip : Users
+    class Recip : Users 
     {
         public void SetExclusionsForMeeting()
         {
@@ -20,8 +20,9 @@ namespace Meetings
             //TODO: needs to have a bool that checks if their is a prefence
         }
 
-        public void WithdrawFromTheMeeting()
+        public void WithdrawFromTheMeeting(string meetingName, string user)
         {
+            Pairs.RemoveUserFromMeeting(meetingName, user);
             //TODO: clears the user from the meeting list
         }
     }

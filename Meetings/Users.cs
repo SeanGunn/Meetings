@@ -9,13 +9,30 @@ namespace Meetings
 {
     abstract class Users
     {
+        protected HashMap Pairs;
         //private Dictionary<String, String> Pairs;
         protected string name;
         protected string username;
         protected string password;
         protected string email;
         protected int tempLogin = 5;
-        
+
+        public Users()
+        {
+            username = "N/A";
+            name = "N/A";
+            password = "";
+            email = "seangunn095@gmail.com";
+        }
+
+        public Users(string username, string name, string password, string email)
+        {
+            this.username = username;
+            this.name = name;
+            this.password = password;
+            this.email = email;
+        }
+
         public void SetName(String value)
         {
             this.name = value;
