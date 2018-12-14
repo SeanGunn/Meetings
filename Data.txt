@@ -1,5 +1,5 @@
-U:Mehmet1#F:Mehmet L:Ozcan P:1111 E:b6018405@my.shu.ac.uk
-U:Jing1#F:Jing L:Wang P:2222 E:b6018405@my.shu.ac.uk
-U:Mick1#F:Michael L:Meredith P:3333 E:b6018405@my.shu.ac.uk
-U:Sean1#F:Sean L:Gunn P:test1 E:b6018405@my.shu.ac.uk
-U:Ziad1#F:Ziad L:Ash P:4444 E:b6018405@my.shu.ac.uk
+Mehmet1#Mehmet:Ozcan:1111:b6018405@my.shu.ac.uk
+Jing1#Jing:Wang:2222:b6018405@my.shu.ac.uk
+Mick1#Michael:Meredith:3333 E:b6018405@my.shu.ac.uk
+Sean1#Sean:Gunn:test1:b6018405@my.shu.ac.uk
+Ziad1#Ziad:Ash:4444:b6018405@my.shu.ac.uk

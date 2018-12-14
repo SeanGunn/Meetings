@@ -8,6 +8,9 @@ namespace Meetings
 {
     class Recip : Users 
     {
+        public Recip(string username, string Fname, string Lname, string password, string email) : base (username, Fname,Lname, password, email)
+        {
+        }
         public void SetExclusionsForMeeting()
         {
             //TODO: asks the user to set exclusion days/times
@@ -23,7 +26,6 @@ namespace Meetings
         public void WithdrawFromTheMeeting(string meetingName, string user)
         {
             Pairs.RemoveUserFromMeeting(meetingName, user);
-            //TODO: clears the user from the meeting list
         }
     }
 }

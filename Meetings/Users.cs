@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
+using System.Windows.Forms;
 
 namespace Meetings
 {
@@ -11,7 +12,8 @@ namespace Meetings
     {
         protected HashMap Pairs;
         //private Dictionary<String, String> Pairs;
-        protected string name;
+        protected string Fname;
+        protected string Lname;
         protected string username;
         protected string password;
         protected string email;
@@ -20,26 +22,37 @@ namespace Meetings
         public Users()
         {
             username = "N/A";
-            name = "N/A";
+            Fname = "N/A";
+            Lname = "N/A";
             password = "";
             email = "seangunn095@gmail.com";
         }
 
-        public Users(string username, string name, string password, string email)
+        public Users(string username, string Fname, string Lname, string password, string email)
         {
             this.username = username;
-            this.name = name;
+            this.Fname = Fname;
+            this.Lname = Lname;
             this.password = password;
             this.email = email;
         }
 
-        public void SetName(String value)
+        public void SetFName(String value)
         {
-            this.name = value;
+            this.Fname = value;
+            MessageBox.Show(value);
         }
-        public string GetName()
+        public string GetFName()
         {
-            return this.name;
+            return this.Fname;
+        }
+        public void SetLName(String value)
+        {
+            this.Lname = value;
+        }
+        public string GetLName()
+        {
+            return this.Lname;
         }
         public void SetUsername(String value)
         {
@@ -103,9 +116,9 @@ namespace Meetings
         {
             var sb = new StringBuilder();
             sb.Append("Name: ");
-            sb.Append(name);
+            sb.Append(Fname + " " + Lname +"\n");
             sb.AppendLine("Username: ");
-            sb.Append(username);
+            sb.Append(username+"\n");
             sb.AppendLine("Email");
             sb.Append(email);
             return sb.ToString();

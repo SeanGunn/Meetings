@@ -19,6 +19,7 @@ namespace Meetings
     //TODO: SEPERATE DATA
     public partial class Form1 : Form
     {
+
         private HashMap Pairs;
         //Dictionary<String, String> Pairs = new Dictionary<String, String>();
         private Users User;
@@ -30,14 +31,17 @@ namespace Meetings
 
         private void Form1_Load()
         {
-            
+            dateTimePicker.MaxDate = DateTime.Today.AddYears(4);
+            dateTimePicker.MinDate = DateTime.Today;
+            dateTimePicker.Format = DateTimePickerFormat.Custom;
+            dateTimePicker.CustomFormat = "ddd/ MMM / yyyy   |   HH:mm";
             Pairs = new HashMap();
             //when forms loads up reads the files
             //database
             try
             {
                 const Int32 BufferSize = 128;
-                using (var fileStream = File.OpenRead(@"C: \Users\sean\source\repos\Meetings\Data.txt"))
+                using (var fileStream = File.OpenRead(@"F:\MyWork\GitHub\Meetings\Data.txt"))
                 using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
                 {
                     while (!(streamReader.EndOfStream))
@@ -49,7 +53,6 @@ namespace Meetings
                         string split1 = splitString[1];
 
                         Pairs.Add(split0, split1);
-
                     }
                     fileStream.Close();
                     // Process line
@@ -62,16 +65,31 @@ namespace Meetings
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Loginbtn_Click(object sender, EventArgs e)
         {
-            
+            string a = UserNameTxtbox.Text;
+            string b = PasswordTxtbox.Text;
+            Pairs.UserIsInTheHash(a, b);
         }
+
 
         private void Form1_Closed()
         {
             //when form closed closes the files and saves them
             //database
             Pairs.RemoveHashMapAstextfile();
+        }
+
+        private void DatePickerbtn_Click(object sender, EventArgs e)
+        {
+
+            int day = dateTimePicker.Value.Day;
+            int month = dateTimePicker.Value.Month;
+            int year = dateTimePicker.Value.Year;
+            int hour = dateTimePicker.Value.Hour;
+            int min = dateTimePicker.Value.Minute;
+
+            MessageBox.Show(""+day+ " " + month + " " + year + " " + hour + " " + min);
         }
     }
 }
