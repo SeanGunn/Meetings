@@ -33,3 +33,8 @@ F:\MyWork\GitHub\Meetings\Meetings\bin\Debug\EntityFramework.SqlServer.dll
 F:\MyWork\GitHub\Meetings\Meetings\bin\Debug\EntityFramework.xml
 F:\MyWork\GitHub\Meetings\Meetings\bin\Debug\EntityFramework.SqlServer.xml
 F:\MyWork\GitHub\Meetings\Meetings\obj\Debug\Meetings.csproj.CopyComplete
+C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\EntityFramework.dll
+C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\EntityFramework.xml
+C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\sean\source\repos\Meetings\Meetings\obj\Debug\Meetings.csproj.CopyComplete

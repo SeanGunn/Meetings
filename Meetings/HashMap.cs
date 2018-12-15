@@ -122,7 +122,7 @@ namespace Meetings
                         String c = i.ToString();
                         if (Pairs[c].Contains("pref") || Pairs[c].Contains("exc"))
                         {
-
+                            //TODO: Finish this part/adds to new textfile
                         }
                         else
                         {

@@ -12,11 +12,10 @@ using System.Text.RegularExpressions;
 
 namespace Meetings
 {
-    //TODO: Systems constrains mmet
-    //TODO: Integrity maintained
     //TODO: Recip may withdraw and exclude some slots
-    //TODO: DROP OUT?
-    //TODO: SEPERATE DATA
+    //TODO: Add new users to hash
+    //TODO: Add new users to text file
+    //TODO: Last: Add a new text file based on meetings
     public partial class Form1 : Form
     {
 
@@ -34,14 +33,14 @@ namespace Meetings
             dateTimePicker.MaxDate = DateTime.Today.AddYears(4);
             dateTimePicker.MinDate = DateTime.Today;
             dateTimePicker.Format = DateTimePickerFormat.Custom;
-            dateTimePicker.CustomFormat = "ddd/ MMM / yyyy   |   HH:mm";
+            dateTimePicker.CustomFormat = "ddd/ MMM / yyyy";
             Pairs = new HashMap();
             //when forms loads up reads the files
             //database
             try
             {
                 const Int32 BufferSize = 128;
-                using (var fileStream = File.OpenRead(@"F:\MyWork\GitHub\Meetings\Data.txt"))
+                using (var fileStream = File.OpenRead(@"C:\Users\sean\source\repos\Meetings\Data.txt"))
                 using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
                 {
                     while (!(streamReader.EndOfStream))
@@ -63,6 +62,13 @@ namespace Meetings
             {
                 MessageBox.Show("Exception: " + A.Message);
             }
+            UsersCheckedListBox.CheckOnClick = true;
+            TimesCheckedListBox.CheckOnClick = true;
+            //TODO: Add users to list over Fruits
+            string[] myFruit = { "Apples", "Oranges", "Tomato" };
+            UsersCheckedListBox.Items.AddRange(myFruit);
+            string[] meetingTimes = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00","17:00","18:00","19:00","20:00","21:00"};
+            TimesCheckedListBox.Items.AddRange(meetingTimes);
         }
 
         private void Loginbtn_Click(object sender, EventArgs e)
@@ -86,10 +92,25 @@ namespace Meetings
             int day = dateTimePicker.Value.Day;
             int month = dateTimePicker.Value.Month;
             int year = dateTimePicker.Value.Year;
-            int hour = dateTimePicker.Value.Hour;
-            int min = dateTimePicker.Value.Minute;
 
-            MessageBox.Show(""+day+ " " + month + " " + year + " " + hour + " " + min);
+            MessageBox.Show(""+day+ " " + month + " " + year);
+
+            string checkedItemsTimes = string.Empty;
+            foreach (object Item in TimesCheckedListBox.CheckedItems)
+            {
+                checkedItemsTimes += Item.ToString();
+                checkedItemsTimes += " ";
+            }
+            MessageBox.Show(checkedItemsTimes);
+
+
+            string checkedItemsUsers = string.Empty;
+            foreach (object Item in UsersCheckedListBox.CheckedItems)
+            {
+                checkedItemsUsers += Item.ToString();
+                checkedItemsUsers += " ";
+            }
+            MessageBox.Show(checkedItemsUsers);
         }
     }
 }
