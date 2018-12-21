@@ -38,3 +38,5 @@ C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\EntityFramework.SqlServer
 C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\EntityFramework.xml
 C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\sean\source\repos\Meetings\Meetings\obj\Debug\Meetings.csproj.CopyComplete
+C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\meetingsDatabase.mdf
+C:\Users\sean\source\repos\Meetings\Meetings\bin\Debug\meetingsDatabase_log.ldf

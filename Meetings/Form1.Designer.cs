@@ -106,7 +106,7 @@
             // 
             // DatePickerbtn
             // 
-            this.DatePickerbtn.Location = new System.Drawing.Point(356, 615);
+            this.DatePickerbtn.Location = new System.Drawing.Point(356, 218);
             this.DatePickerbtn.Name = "DatePickerbtn";
             this.DatePickerbtn.Size = new System.Drawing.Size(285, 98);
             this.DatePickerbtn.TabIndex = 6;
@@ -141,21 +141,21 @@
             // 
             // newPasswordTxtbox
             // 
-            this.newPasswordTxtbox.Location = new System.Drawing.Point(92, 394);
+            this.newPasswordTxtbox.Location = new System.Drawing.Point(92, 555);
             this.newPasswordTxtbox.Name = "newPasswordTxtbox";
             this.newPasswordTxtbox.Size = new System.Drawing.Size(100, 20);
             this.newPasswordTxtbox.TabIndex = 10;
             // 
             // newFirstnameTxtbox
             // 
-            this.newFirstnameTxtbox.Location = new System.Drawing.Point(92, 476);
+            this.newFirstnameTxtbox.Location = new System.Drawing.Point(94, 399);
             this.newFirstnameTxtbox.Name = "newFirstnameTxtbox";
             this.newFirstnameTxtbox.Size = new System.Drawing.Size(100, 20);
             this.newFirstnameTxtbox.TabIndex = 11;
             // 
             // newLastnameTxtbox
             // 
-            this.newLastnameTxtbox.Location = new System.Drawing.Point(94, 553);
+            this.newLastnameTxtbox.Location = new System.Drawing.Point(94, 475);
             this.newLastnameTxtbox.Name = "newLastnameTxtbox";
             this.newLastnameTxtbox.Size = new System.Drawing.Size(100, 20);
             this.newLastnameTxtbox.TabIndex = 12;
@@ -202,13 +202,14 @@
             this.newUserBtn.TabIndex = 17;
             this.newUserBtn.Text = "Create a new user";
             this.newUserBtn.UseVisualStyleBackColor = true;
+            this.newUserBtn.Click += new System.EventHandler(this.NewUserBtn_Click);
             // 
             // UsersCheckedListBox
             // 
             this.UsersCheckedListBox.FormattingEnabled = true;
             this.UsersCheckedListBox.Location = new System.Drawing.Point(356, 88);
             this.UsersCheckedListBox.Name = "UsersCheckedListBox";
-            this.UsersCheckedListBox.Size = new System.Drawing.Size(136, 484);
+            this.UsersCheckedListBox.Size = new System.Drawing.Size(136, 124);
             this.UsersCheckedListBox.TabIndex = 18;
             // 
             // TimesCheckedListBox
@@ -216,7 +217,7 @@
             this.TimesCheckedListBox.FormattingEnabled = true;
             this.TimesCheckedListBox.Location = new System.Drawing.Point(507, 88);
             this.TimesCheckedListBox.Name = "TimesCheckedListBox";
-            this.TimesCheckedListBox.Size = new System.Drawing.Size(134, 484);
+            this.TimesCheckedListBox.Size = new System.Drawing.Size(134, 124);
             this.TimesCheckedListBox.TabIndex = 19;
             // 
             // Form1
