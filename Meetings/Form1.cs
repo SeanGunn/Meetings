@@ -34,7 +34,6 @@ namespace Meetings
             Pairs = new HashMap();
             UsersCheckedListBox.CheckOnClick = true;
             TimesCheckedListBox.CheckOnClick = true;
-            //TODO: have 2 lists that are based on a button that sets a bool to true or false of true have public times and only work for some dates
             AddUsersToUsersCheckedList();
             string[] meetingTimes = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00","17:00","18:00","19:00","20:00","21:00"};
             TimesCheckedListBox.Items.AddRange(meetingTimes);
@@ -96,6 +95,7 @@ namespace Meetings
                 NewUser(Username, Firstname, LastName, Password, email);
             else
                 MessageBox.Show("Fill all the data please");
+            //TODO: ADD IN OTHER TEXTBOXES
             newUsernameTxtbox.Text = "";
             newFirstnameTxtbox.Text = "";
             newLastnameTxtbox.Text = "";
@@ -345,7 +345,7 @@ namespace Meetings
             //TODO: When rearraging i need have it not show current user
             foreach (String user in namesList)
             {
-                if(user != username)
+                //if(user != username)
                 //    UsersCheckedListBox.Items.Add(user);
                 UsersCheckedListBox.Items.Add(user);
             }

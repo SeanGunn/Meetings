@@ -66,7 +66,7 @@ namespace Meetings
                 MessageBox.Show("The meeting doesnt exist");
             }
         }
-        //TODO: here is the say to check users in meetings
+        
         public void OtherUsersInMeetings(string key, string user,string dateTime)
         {
             string a = "";
@@ -122,7 +122,7 @@ namespace Meetings
                         String c = i.ToString();
                         if (Pairs[c].Contains("pref") || Pairs[c].Contains("exc"))
                         {
-                            //TODO: Finish this part/adds to new textfile
+                            
                         }
                         else
                         {
