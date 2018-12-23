@@ -51,7 +51,7 @@ namespace Meetings
 
         private void DatePickerbtn_Click(object sender, EventArgs e)
         {
-            
+            //TODO: IF public was pressed need to vaidate insertUser string or else it will be the wrong date
             int day = dateTimePicker.Value.Day;
             int month = dateTimePicker.Value.Month;
             int year = dateTimePicker.Value.Year;
@@ -296,7 +296,6 @@ namespace Meetings
 
         private void PublicBtn_Click(object sender, EventArgs e)
         {
-            //TODO: Sets times to public times and dates to public dates Monday to friday 8 am to 5 pm If user picks none week day ask to pick again
             string[] meetingTimes = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00" };
             TimesCheckedListBox.Items.Clear();
             TimesCheckedListBox.Items.AddRange(meetingTimes);
@@ -304,9 +303,7 @@ namespace Meetings
 
         private void PrivateBtn_Click(object sender, EventArgs e)
         {
-            //TODO: Sets times to private times and dates to public dates Monday to Sunday 8 am to 9 pm
             string[] meetingTimes = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00" };
-            //Its as it is now
             TimesCheckedListBox.Items.Clear();
             TimesCheckedListBox.Items.AddRange(meetingTimes);
         }
