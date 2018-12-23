@@ -80,8 +80,10 @@ namespace Meetings
             //string MeetingOwnerName = "";
             //TODO: Add to database that creates information with (CreateMeetingsDatabase(string meetingsName))
             //TODO: Adds meeting creators name then amountInMeeting then UsersInMeeting names then times of meetings
-            //String insertUser = "Insert into "+ MeetingsDatabaseName+ " (MeetingOwner,AmountInMeeting,UsersInMeeting,TimeOfMeetings) values ('" + MeetingOwnerName + "','"+ AmountOfUsersChecked + "','" + checkedItemsUsers + "','" + checkedItemsTimes + ")";
-        }  
+            //For now 
+            //String insertUser = "Insert into "+ MeetingsDatabaseName+ " (MeetingOwner,AmountInMeeting,UsersInMeeting,TimeOfMeetings) values ('Mehmet Ozcan','"+ AmountOfUsersChecked + "','" + checkedItemsUsers + "','" + checkedItemsTimes + ")";
+            //later have so anyone can be MeetingOwner using buttons
+        }
 
         private void NewUserBtn_Click(object sender, EventArgs e)
         {
@@ -100,7 +102,7 @@ namespace Meetings
             newPasswordTxtbox.Text = "";
             newEmailTxtbox.Text = "";
         }
-
+        //TODO: HERE COPY
         private void NewUser(string Username,string Firstname,string LastName, string Password,string email)
         {
             bool itContains = false;
@@ -161,7 +163,7 @@ namespace Meetings
             }
             
         }
-
+        //TODO: HERE COPY
         private void UserExists(string username, string password)
         {
             string firstName = "";
@@ -186,8 +188,11 @@ namespace Meetings
 
                     cnn.Close();
                 }
+                //TODO: need to add button option here to set as either init or recip
+                //That means a bit of rewiting so the later code and I know if the user is a init or recip
                 if ((username == "Mehmet1") && (lastName!=""))
                 {
+                    //later change so anyone can be init
                     Init init1 = new Init(username, firstName, lastName, password, email);
                     MessageBox.Show(init1.ToString());
                 }
@@ -211,7 +216,7 @@ namespace Meetings
             else
                 MessageBox.Show("Fill all the data please");
         }
-
+        //TODO: HERE COPY
         private void CreateMeetingsDatabase(string meetingsName)
         {
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
@@ -251,7 +256,7 @@ namespace Meetings
             }
            
         }
-
+        //TODO: HERE COPY
         private void DropMeeting(string meetingsName)
         {
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
@@ -307,7 +312,7 @@ namespace Meetings
             TimesCheckedListBox.Items.Clear();
             TimesCheckedListBox.Items.AddRange(meetingTimes);
         }
-
+        
         private void AddUsersToUsersCheckedList()
         {
             string oString = "Select * from MeetingsDatabase where ID > 0";
@@ -340,7 +345,7 @@ namespace Meetings
             //TODO: When rearraging i need have it not show current user
             foreach (String user in namesList)
             {
-                //if(user != username)
+                if(user != username)
                 //    UsersCheckedListBox.Items.Add(user);
                 UsersCheckedListBox.Items.Add(user);
             }
