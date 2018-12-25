@@ -14,6 +14,7 @@ namespace Meetings
         //private Dictionary<String, String> Pairs;
         protected string Fname;
         protected string Lname;
+        protected string Fullname;
         protected string username;
         protected string password;
         protected string email;
@@ -35,6 +36,7 @@ namespace Meetings
             this.Lname = Lname;
             this.password = password;
             this.email = email;
+            SetFullName(Fname, Lname);
         }
 
         public void SetFName(String value)
@@ -70,6 +72,16 @@ namespace Meetings
         public string GetPassword()
         {
             return this.password;
+        }
+
+        public void SetFullName(String value, String value2)
+        {
+            this.Fullname = value + value2;
+        }
+
+        public string GetFullName()
+        {
+            return this.Fullname;
         }
 
         public void SetEmail(String value)

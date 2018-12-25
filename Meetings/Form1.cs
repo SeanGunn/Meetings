@@ -17,7 +17,8 @@ namespace Meetings
     //TODO: Rearange all functions and prob create a class for them and remmove hashmap class
     public partial class Form1 : Form
     {
-
+        Init init1;
+        Recip recip1;
         private HashMap Pairs;
         public Form1()
         {
@@ -31,9 +32,16 @@ namespace Meetings
             dateTimePicker.MinDate = DateTime.Today;
             dateTimePicker.Format = DateTimePickerFormat.Custom;
             dateTimePicker.CustomFormat = "ddd/ MMM / yyyy";
+            dateTimePickerUpdate.MaxDate = DateTime.Today.AddYears(4);
+            dateTimePickerUpdate.MinDate = DateTime.Today;
+            dateTimePickerUpdate.Format = DateTimePickerFormat.Custom;
+            dateTimePickerUpdate.CustomFormat = "ddd/ MMM / yyyy";
             Pairs = new HashMap();
             UsersCheckedListBox.CheckOnClick = true;
             TimesCheckedListBox.CheckOnClick = true;
+            UsersCheckedListBoxUpdate.CheckOnClick = true;
+            TimesCheckedListBoxUpdate.CheckOnClick = true;
+            CheckedListBoxMeetingsList.CheckOnClick = true;
             AddUsersToUsersCheckedList();
             string[] meetingTimes = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00","17:00","18:00","19:00","20:00","21:00"};
             TimesCheckedListBox.Items.AddRange(meetingTimes);
@@ -60,7 +68,7 @@ namespace Meetings
             string checkedItemsTimes = string.Empty;
             foreach (object Item in TimesCheckedListBox.CheckedItems)
             {
-                checkedItemsTimes += Item.ToString();
+                checkedItemsTimes += Item.ToString().Trim();
                 checkedItemsTimes += ",";
             }
             MessageBox.Show(checkedItemsTimes);
@@ -70,17 +78,80 @@ namespace Meetings
             string checkedItemsUsers = string.Empty;
             foreach (object Item in UsersCheckedListBox.CheckedItems)
             {
-                checkedItemsUsers += Item.ToString();
+                checkedItemsUsers += Item.ToString().Trim();
                 checkedItemsUsers += ",";
             }
             MessageBox.Show(checkedItemsUsers);
-            //TODO: Pass the meeting name
-            //string MeetingsDatabaseName = "";
-            //string MeetingOwnerName = "";
-            //TODO: Add to database that creates information with (CreateMeetingsDatabase(string meetingsName))
-            //TODO: Adds meeting creators name then amountInMeeting then UsersInMeeting names then times of meetings
-            //For now 
-            //String insertUser = "Insert into "+ MeetingsDatabaseName+ " (MeetingOwner,AmountInMeeting,UsersInMeeting,TimeOfMeetings) values ('Mehmet Ozcan','"+ AmountOfUsersChecked + "','" + checkedItemsUsers + "','" + checkedItemsTimes + ")";
+            //TODO: Pass the meeting name/Create a list that has all the meetings
+            string MeetingsDatabaseName = "Work1";
+            String insertMeetingsPart1 = "Insert into " + MeetingsDatabaseName + " (MeetingDate ,MeetingOwner,AmountInMeeting,";
+            String insertMeetingsPart2 = "";
+            String user = "UsersInMeeting";
+            String insertMeetingsPart3 = "";
+            String time = "TimeOfMeetings";
+            int a = 0;
+            String dateOfMeeting = "'" + day + "/" + month + "/" + year;
+            for (int i = 0; i < UsersCheckedListBox.Items.Count; i++)
+            {
+                a = i + 1;
+                insertMeetingsPart2 += "" + user + a;
+                insertMeetingsPart2 += ",";
+            }
+            a = 0;
+            for (int i = 0; i < TimesCheckedListBox.Items.Count; i++)
+            {
+                a = i + 1;
+                insertMeetingsPart3 += "" + time + a;
+                if(a != TimesCheckedListBox.Items.Count)
+                    insertMeetingsPart3 += ",";
+            }
+            String insertMeetingsPart4 = ") values ("+ dateOfMeeting+"','"+init1.GetFullName()+"', '" + AmountOfUsersChecked + "', '";
+            String insertMeetingsPart5 = "";
+            String insertMeetingsPart6 = "";
+            foreach (object Item in UsersCheckedListBox.CheckedItems)
+            {
+                insertMeetingsPart5 += Item.ToString();
+                insertMeetingsPart5 += "', '";
+            }
+            for (int i = 0; i < (UsersCheckedListBox.Items.Count)- UsersCheckedListBox.CheckedItems.Count; i++)
+            {
+                insertMeetingsPart6 += "NULL ', '";
+            }
+            String insertMeetingsPart7 = "";
+            int b = 0;
+            foreach (object Item in TimesCheckedListBox.CheckedItems)
+            {   b += 1;
+                insertMeetingsPart7 += Item.ToString().Trim();
+                if(b != TimesCheckedListBox.CheckedItems.Count)
+                    insertMeetingsPart7 += "', '";
+                
+            }
+            String insertMeetingsPart8 = "";
+            b = 0;
+            for (int i = 0; i < (TimesCheckedListBox.Items.Count) - TimesCheckedListBox.CheckedItems.Count; i++)
+            {
+                if ( b!= ((TimesCheckedListBox.Items.Count) - TimesCheckedListBox.CheckedItems.Count))
+                    insertMeetingsPart8 += "', '";
+                insertMeetingsPart8 += "NULL";
+                b = i + 1;
+            }
+            MessageBox.Show(insertMeetingsPart8);
+            String insertUsersFull = insertMeetingsPart1 + insertMeetingsPart2 + insertMeetingsPart3 + insertMeetingsPart4 + insertMeetingsPart5 + insertMeetingsPart6 + insertMeetingsPart7 + insertMeetingsPart8 + "')";
+            MessageBox.Show(insertUsersFull);
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            SqlConnection cnn = new SqlConnection(ConString);
+            try
+            {
+                SqlCommand oCmd = new SqlCommand(insertUsersFull, cnn);
+                cnn.Open();
+                oCmd.ExecuteNonQuery();
+                oCmd.Dispose();
+                cnn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
             //later have so anyone can be MeetingOwner using buttons
         }
 
@@ -102,7 +173,7 @@ namespace Meetings
             newPasswordTxtbox.Text = "";
             newEmailTxtbox.Text = "";
         }
-        //TODO: HERE COPY
+
         private void NewUser(string Username,string Firstname,string LastName, string Password,string email)
         {
             bool itContains = false;
@@ -163,7 +234,7 @@ namespace Meetings
             }
             
         }
-        //TODO: HERE COPY
+        
         private void UserExists(string username, string password)
         {
             string firstName = "";
@@ -193,12 +264,12 @@ namespace Meetings
                 if ((username == "Mehmet1") && (lastName!=""))
                 {
                     //later change so anyone can be init
-                    Init init1 = new Init(username, firstName, lastName, password, email);
+                    init1 = new Init(username, firstName, lastName, password, email);
                     MessageBox.Show(init1.ToString());
                 }
                 else if((username != "Mehmet1") && (lastName != ""))
                 {
-                    Recip recip1 = new Recip(username, firstName, lastName, password, email);
+                    recip1 = new Recip(username, firstName, lastName, password, email);
                     MessageBox.Show(recip1.ToString());
                 }
                 else
@@ -216,7 +287,7 @@ namespace Meetings
             else
                 MessageBox.Show("Fill all the data please");
         }
-        //TODO: HERE COPY
+        
         private void CreateMeetingsDatabase(string meetingsName)
         {
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
@@ -239,7 +310,35 @@ namespace Meetings
                         MessageBox.Show("Meeting called " + meetingsName+ " is being set");
                         try
                         {
-                            using (SqlCommand command = new SqlCommand("CREATE TABLE[dbo].["+ meetingsName + "] (MeetingOwner varchar(20), AmountInMeeting INT, UsersInMeeting varchar(255), TimeOfMeetings varchar(255));", con))
+                            String insertMeetingsPart1 = "CREATE TABLE[dbo].["+ meetingsName + "] (MeetingDate varchar(20), MeetingOwner varchar(20), AmountInMeeting INT,";
+                            String insertMeetingsPart2 = "";
+                            String user = "UsersInMeeting";
+                            String insertMeetingsPart3 = "";
+                            String time = "TimeOfMeetings";
+                            int a = 0;
+                            for (int i = 0; i < UsersCheckedListBox.Items.Count; i++)
+                            {
+                                a = i + 1;
+                                insertMeetingsPart2 += "" + user + a;
+                                insertMeetingsPart2 += " varchar(20)";
+                                insertMeetingsPart2 += ",";
+                            }
+                            a = 0;
+                            for (int i = 0; i < TimesCheckedListBox.Items.Count; i++)
+                            {
+                                a = i + 1;
+                                insertMeetingsPart3 += "" + time + a;
+                                insertMeetingsPart3 += " varchar(20)";
+                                if (a != TimesCheckedListBox.Items.Count)
+                                    insertMeetingsPart3 += ",";
+                                else
+                                    insertMeetingsPart3 += "); ";
+                            }
+                            String insertMeetingsFull = insertMeetingsPart1 + insertMeetingsPart2 + insertMeetingsPart3 ;
+                            using (SqlCommand command = new SqlCommand(insertMeetingsFull, con))
+                                command.ExecuteNonQuery();
+                            String addToGlobalTableList = "Insert into GlobalTableList (MeetingName, MeetingOwner) values ('" + meetingsName + "','" + init1.GetFullName() + "');";
+                            using (SqlCommand command = new SqlCommand(addToGlobalTableList, con))
                                 command.ExecuteNonQuery();
                         }
                         catch (Exception ex)
@@ -256,12 +355,13 @@ namespace Meetings
             }
            
         }
-        //TODO: HERE COPY
+        
         private void DropMeeting(string meetingsName)
         {
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             string cmdText = @"IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES 
                        WHERE TABLE_NAME='" + meetingsName + "') SELECT 1 ELSE SELECT 0";
+            string command2 = "Delete from GlobalTableList where MeetingName='" + meetingsName + "';";
             using (SqlConnection con = new SqlConnection(ConString))
             {
 
@@ -275,6 +375,9 @@ namespace Meetings
                         MessageBox.Show("Canceling the meeting");
                         using (SqlCommand command = new SqlCommand("DROP TABLE[dbo].[" + meetingsName + "];", con))
                             command.ExecuteNonQuery();
+                        using(SqlCommand com2 = new SqlCommand(command2, con))
+                            com2.ExecuteNonQuery();
+
                     }
                     else
                     {
@@ -349,6 +452,47 @@ namespace Meetings
                 //    UsersCheckedListBox.Items.Add(user);
                 UsersCheckedListBox.Items.Add(user);
             }
+        }
+
+        private void UpdateUsersInMeetingBtn_Click(object sender, EventArgs e)
+        {
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+
+        }
+
+        private void MeetingsListBtn_Click(object sender, EventArgs e)
+        {//TODO: add to the list then display all the names of 
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            string com = "SELECT MeetingName FROM GlobalTableList where MeetingOwner = '" + recip1.GetFullName() + "';";
+            List<string> namesListInDatabase = new List<string>();
+            //using (SqlConnection con = new SqlConnection(ConString))
+            //{
+            //    SqlCommand oCmd = new SqlCommand(oString, cnn);
+            //    cnn.Open();
+            //    using (SqlDataReader oReader = oCmd.ExecuteReader())
+            //    {
+            //        while (oReader.Read())
+            //        {
+            //            firstName = oReader["FirstName"].ToString();
+            //               lastName = oReader["Surname"].ToString();
+            //                name = firstName + " " + lastName;
+            //                namesList.Add(name);
+            //            }
+            //            cnn.Close();
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show(ex.ToString());
+            //    }
+            //    //TODO: When rearraging i need have it not show current user
+            //    foreach (String user in namesList)
+            //    {
+            //        //if(user != username)
+            //        //    UsersCheckedListBox.Items.Add(user);
+            //        UsersCheckedListBox.Items.Add(user);
+            //    }
+            //}
         }
     }
 
