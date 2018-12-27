@@ -76,7 +76,7 @@ namespace Meetings
 
         public void SetFullName(String value, String value2)
         {
-            this.Fullname = value + value2;
+            this.Fullname = value+ value2;
         }
 
         public string GetFullName()
@@ -128,7 +128,7 @@ namespace Meetings
         {
             var sb = new StringBuilder();
             sb.Append("Name: ");
-            sb.Append(Fname + " " + Lname +"\n");
+            sb.Append(Fullname +"\n");
             sb.AppendLine("Username: ");
             sb.Append(username+"\n");
             sb.AppendLine("Email");

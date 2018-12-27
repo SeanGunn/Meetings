@@ -19,7 +19,7 @@ namespace Meetings
     {
         Init init1;
         Recip recip1;
-        private HashMap Pairs;
+        private Database database1;
         public Form1()
         {
             InitializeComponent();
@@ -28,6 +28,7 @@ namespace Meetings
 
         private void Form1_Load()
         {
+            database1 = new Database("");
             dateTimePicker.MaxDate = DateTime.Today.AddYears(4);
             dateTimePicker.MinDate = DateTime.Today;
             dateTimePicker.Format = DateTimePickerFormat.Custom;
@@ -36,7 +37,6 @@ namespace Meetings
             dateTimePickerUpdate.MinDate = DateTime.Today;
             dateTimePickerUpdate.Format = DateTimePickerFormat.Custom;
             dateTimePickerUpdate.CustomFormat = "ddd/ MMM / yyyy";
-            Pairs = new HashMap();
             UsersCheckedListBox.CheckOnClick = true;
             TimesCheckedListBox.CheckOnClick = true;
             UsersCheckedListBoxUpdate.CheckOnClick = true;
@@ -44,6 +44,8 @@ namespace Meetings
             CheckedListBoxMeetingsList.CheckOnClick = true;
             AddUsersToUsersCheckedList();
             string[] meetingTimes = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00","17:00","18:00","19:00","20:00","21:00"};
+            init1 = new Init("","Mehmet", "Ozcan", "","");
+            recip1 = new Recip("", "", "", "", "");
             TimesCheckedListBox.Items.AddRange(meetingTimes);
         }
 
@@ -83,7 +85,7 @@ namespace Meetings
             }
             MessageBox.Show(checkedItemsUsers);
             //TODO: Pass the meeting name/Create a list that has all the meetings
-            string MeetingsDatabaseName = "Work1";
+            string MeetingsDatabaseName = database1.GetName();
             String insertMeetingsPart1 = "Insert into " + MeetingsDatabaseName + " (MeetingDate ,MeetingOwner,AmountInMeeting,";
             String insertMeetingsPart2 = "";
             String user = "UsersInMeeting";
@@ -266,11 +268,14 @@ namespace Meetings
                     //later change so anyone can be init
                     init1 = new Init(username, firstName, lastName, password, email);
                     MessageBox.Show(init1.ToString());
+                    MeetingList();
                 }
                 else if((username != "Mehmet1") && (lastName != ""))
                 {
                     recip1 = new Recip(username, firstName, lastName, password, email);
                     MessageBox.Show(recip1.ToString());
+                    //TODO: DEACTERATE OTHER BUTTIONS AND LISTS
+                    //TODO: SHOWS ALL THEIR MEETINGS THEY ARE IN
                 }
                 else
                 {
@@ -307,6 +312,7 @@ namespace Meetings
                     }
                     else
                     {
+                        
                         MessageBox.Show("Meeting called " + meetingsName+ " is being set");
                         try
                         {
@@ -337,15 +343,18 @@ namespace Meetings
                             String insertMeetingsFull = insertMeetingsPart1 + insertMeetingsPart2 + insertMeetingsPart3 ;
                             using (SqlCommand command = new SqlCommand(insertMeetingsFull, con))
                                 command.ExecuteNonQuery();
-                            String addToGlobalTableList = "Insert into GlobalTableList (MeetingName, MeetingOwner) values ('" + meetingsName + "','" + init1.GetFullName() + "');";
+                            MessageBox.Show("Hi");
+                            String addToGlobalTableList = "Insert into GlobalTableList (MeetingOwner,MeetingName) values ('" + init1.GetFullName() + "','" + meetingsName + "');";
                             using (SqlCommand command = new SqlCommand(addToGlobalTableList, con))
                                 command.ExecuteNonQuery();
+                            MeetingList();
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show(ex.Message);
                         }
                     }
+                    database1.SetName(""+meetingsName);
                     con.Close();
                 }
                 catch (Exception ex)
@@ -375,6 +384,10 @@ namespace Meetings
                         MessageBox.Show("Canceling the meeting");
                         using (SqlCommand command = new SqlCommand("DROP TABLE[dbo].[" + meetingsName + "];", con))
                             command.ExecuteNonQuery();
+                        if(meetingsName == database1.GetName())
+                        {
+                            database1.SetName("");
+                        }
                         using(SqlCommand com2 = new SqlCommand(command2, con))
                             com2.ExecuteNonQuery();
 
@@ -400,6 +413,7 @@ namespace Meetings
                 DropMeeting(meetingsName);
             else
                 MessageBox.Show("Fill all the data please");
+            MeetingList();
         }
 
         private void PublicBtn_Click(object sender, EventArgs e)
@@ -448,7 +462,7 @@ namespace Meetings
             //TODO: When rearraging i need have it not show current user
             foreach (String user in namesList)
             {
-                //if(user != username)
+                //if(user != init1.GetFullName())
                 //    UsersCheckedListBox.Items.Add(user);
                 UsersCheckedListBox.Items.Add(user);
             }
@@ -456,44 +470,52 @@ namespace Meetings
 
         private void UpdateUsersInMeetingBtn_Click(object sender, EventArgs e)
         {
+            //TODO: READS INPUT ABOVE
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
 
         }
 
         private void MeetingsListBtn_Click(object sender, EventArgs e)
         {//TODO: add to the list then display all the names of 
+            //TODO: GIVES INFORMATION BASED ON CLICK
+        }
+
+        private void MeetingList()
+        {
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
-            string com = "SELECT MeetingName FROM GlobalTableList where MeetingOwner = '" + recip1.GetFullName() + "';";
+            string com = "Select * from GlobalTableList;";
             List<string> namesListInDatabase = new List<string>();
-            //using (SqlConnection con = new SqlConnection(ConString))
-            //{
-            //    SqlCommand oCmd = new SqlCommand(oString, cnn);
-            //    cnn.Open();
-            //    using (SqlDataReader oReader = oCmd.ExecuteReader())
-            //    {
-            //        while (oReader.Read())
-            //        {
-            //            firstName = oReader["FirstName"].ToString();
-            //               lastName = oReader["Surname"].ToString();
-            //                name = firstName + " " + lastName;
-            //                namesList.Add(name);
-            //            }
-            //            cnn.Close();
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show(ex.ToString());
-            //    }
-            //    //TODO: When rearraging i need have it not show current user
-            //    foreach (String user in namesList)
-            //    {
-            //        //if(user != username)
-            //        //    UsersCheckedListBox.Items.Add(user);
-            //        UsersCheckedListBox.Items.Add(user);
-            //    }
-            //}
+            SqlConnection cnn = new SqlConnection(ConString);
+            try
+            {
+                string meetingOwner = "";
+                string meetingName = "";
+                SqlCommand oCmd = new SqlCommand(com, cnn);
+                cnn.Open();
+                using (SqlDataReader oReader = oCmd.ExecuteReader())
+                {
+                    while (oReader.Read())
+                    {
+                        meetingOwner = oReader["MeetingOwner"].ToString();
+                        if (meetingOwner == init1.GetFullName())
+                        {
+                            meetingName = oReader["MeetingName"].ToString();
+                            namesListInDatabase.Add(meetingName);
+                        }
+                    }
+                    cnn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            CheckedListBoxMeetingsList.Items.Clear();
+            //TODO: When rearraging i need have it not show current user
+            foreach (String meeting in namesListInDatabase)
+            {
+                CheckedListBoxMeetingsList.Items.Add(meeting);
+            }
         }
     }
-
 }
