@@ -84,7 +84,6 @@ namespace Meetings
                 checkedItemsUsers += ",";
             }
             MessageBox.Show(checkedItemsUsers);
-            //TODO: Pass the meeting name/Create a list that has all the meetings
             string MeetingsDatabaseName = database1.GetName();
             String insertMeetingsPart1 = "Insert into " + MeetingsDatabaseName + " (MeetingDate ,MeetingOwner,AmountInMeeting,";
             String insertMeetingsPart2 = "";
@@ -155,6 +154,16 @@ namespace Meetings
                 MessageBox.Show(ex.ToString());
             }
             //later have so anyone can be MeetingOwner using buttons
+            TimesCheckedListBox.ClearSelected();
+            UsersCheckedListBox.ClearSelected();
+            foreach (int i in TimesCheckedListBox.CheckedIndices)
+            {
+                TimesCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
+            }
+            foreach (int i in UsersCheckedListBox.CheckedIndices)
+            {
+                UsersCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
+            }
         }
 
         private void NewUserBtn_Click(object sender, EventArgs e)
@@ -406,14 +415,32 @@ namespace Meetings
         }
 
         private void CancelAMeetingBtn_Click(object sender, EventArgs e)
-        {
-            //TODO: Can turn this into a list based on owner of meeting
+        {//TODO: Can turn this into a list based on owner of meeting
+            //if (CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
+            //{
+            //    List<string> usersInThatMeeting = new List<string>();
+            //    AllYourMeetingsUsersList(usersInThatMeeting);
+            //    foreach (string b in usersInThatMeeting)
+            //    {
+            //        MessageBox.Show(b);
+            //    }
+            //    MessageBox.Show(usersInThatMeeting.Count.ToString());
+            //    UsersInMeetingTransferBtn.Enabled = true;
+            //    UpdateDateTimeBtn.Enabled = true;
+            //}
+            //else
+            //    MessageBox.Show("Only one at a time please");
             string meetingsName = cancelAMeetingTextBox.Text;
             if (meetingsName != "")
                 DropMeeting(meetingsName);
             else
                 MessageBox.Show("Fill all the data please");
             MeetingList();
+            CheckedListBoxMeetingsList.ClearSelected();
+            foreach (int i in CheckedListBoxMeetingsList.CheckedIndices)
+            {
+                CheckedListBoxMeetingsList.SetItemCheckState(i, CheckState.Unchecked);
+            }
         }
 
         private void PublicBtn_Click(object sender, EventArgs e)
@@ -470,14 +497,107 @@ namespace Meetings
 
         private void UpdateUsersInMeetingBtn_Click(object sender, EventArgs e)
         {
-            //TODO: READS INPUT ABOVE
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
-
+            //TODO: TURNS ON REMOVE USERS
+            if(CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
+            {
+                List<string> usersInThatMeeting = new List<string>();
+                AllYourMeetingsUsersList(usersInThatMeeting);
+                foreach (string b in usersInThatMeeting)
+                {
+                    MessageBox.Show(b);
+                }
+                MessageBox.Show(usersInThatMeeting.Count.ToString());
+                UsersInMeetingTransferBtn.Enabled = true;
+                UpdateDateTimeBtn.Enabled = true;
+            }
+            else
+                MessageBox.Show("Only one at a time please");
+            CheckedListBoxMeetingsList.ClearSelected();
+            foreach (int i in CheckedListBoxMeetingsList.CheckedIndices)
+            {
+                CheckedListBoxMeetingsList.SetItemCheckState(i, CheckState.Unchecked);
+            }
         }
 
+        private void AllYourMeetingsUsersList(List<string> usersInThatMeeting)
+        {
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            List<string> namesMeetingDatabase = new List<string>();
+            
+            string meetingName = "";
+            string personName = "";
+            int intAmountInMeeting = 0;
+            int a = 1;
+            foreach (object Item in CheckedListBoxMeetingsList.CheckedItems)
+            {
+                meetingName += Item.ToString();
+                namesMeetingDatabase.Add(meetingName);
+            }
+            foreach (String nameOfMeeting in namesMeetingDatabase)
+            {
+                String command = "Select * from " + nameOfMeeting + ";";
+                SqlConnection cnn = new SqlConnection(ConString);
+                try
+                {
+                    SqlCommand oCmd = new SqlCommand(command, cnn);
+                    cnn.Open();
+                    using (SqlDataReader oReader = oCmd.ExecuteReader())
+                    {
+                        while (oReader.Read())
+                        {
+                            a = 1;
+                            intAmountInMeeting = oReader.GetInt32(2);
+                            
+                            while (a <= (intAmountInMeeting))
+                            {
+                                personName = oReader.GetString((a + 2));
+                                if (usersInThatMeeting.Contains(personName))
+                                {
+                                    a++;
+                                }
+                                else
+                                {
+                                    usersInThatMeeting.Add(personName);
+                                    a++;
+                                }
+                            }
+                        }
+                        cnn.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
+            foreach (string b in usersInThatMeeting)
+            {
+                MessageBox.Show(b);
+            }
+            MessageBox.Show(usersInThatMeeting.Count.ToString());
+        }
         private void MeetingsListBtn_Click(object sender, EventArgs e)
-        {//TODO: add to the list then display all the names of 
-            //TODO: GIVES INFORMATION BASED ON CLICK
+        {//TODO: change the cancel button to off then turn it on when do its todo
+         //if (CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
+         //{
+         //    List<string> usersInThatMeeting = new List<string>();
+         //    AllYourMeetingsUsersList(usersInThatMeeting);
+         //    foreach (string b in usersInThatMeeting)
+         //    {
+         //        MessageBox.Show(b);
+         //    }
+         //    MessageBox.Show(usersInThatMeeting.Count.ToString());
+
+            //}
+            //else
+            //    MessageBox.Show("Only one at a time please");
+            //CheckedListBoxMeetingsList.ClearSelected();
+            //foreach (int i in CheckedListBoxMeetingsList.CheckedIndices)
+            //{
+            //    CheckedListBoxMeetingsList.SetItemCheckState(i, CheckState.Unchecked);
+            //}
+            UsersInMeetingTransferBtn.Enabled = true;
+            UpdateDateTimeBtn.Enabled = true;
         }
 
         private void MeetingList()
@@ -516,6 +636,40 @@ namespace Meetings
             {
                 CheckedListBoxMeetingsList.Items.Add(meeting);
             }
+        }
+
+        private void UpdateDateTimeBtn_Click(object sender, EventArgs e)
+        {
+            //TODO: CHANGES DATE AND TIME
+            if (CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
+            {
+                List<string> usersInThatMeeting = new List<string>();
+                AllYourMeetingsUsersList(usersInThatMeeting);
+                foreach (string b in usersInThatMeeting)
+                {
+                    MessageBox.Show(b);
+                }
+                MessageBox.Show(usersInThatMeeting.Count.ToString());
+                UsersInMeetingTransferBtn.Enabled = true;
+                UpdateDateTimeBtn.Enabled = true;
+            }
+            else
+                MessageBox.Show("Only one at a time please");
+            CheckedListBoxMeetingsList.ClearSelected();
+            foreach (int i in CheckedListBoxMeetingsList.CheckedIndices)
+            {
+                CheckedListBoxMeetingsList.SetItemCheckState(i, CheckState.Unchecked);
+            }
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            //TODO: REMOVE CLICKED USER FROM DATABASE
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            //TODO: CHANGE TIME OF MEETING
         }
     }
 }

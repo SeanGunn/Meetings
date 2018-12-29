@@ -59,11 +59,13 @@
             this.UsersCheckedListBoxUpdate = new System.Windows.Forms.CheckedListBox();
             this.TimesCheckedListBoxUpdate = new System.Windows.Forms.CheckedListBox();
             this.dateTimePickerUpdate = new System.Windows.Forms.DateTimePicker();
-            this.UpdateUsersInMeetingBtn = new System.Windows.Forms.Button();
+            this.UsersInMeetingTransferBtn = new System.Windows.Forms.Button();
             this.UpdateDateTimeBtn = new System.Windows.Forms.Button();
             this.CheckedListBoxMeetingsList = new System.Windows.Forms.CheckedListBox();
             this.MeetingsListBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Loginbtn
@@ -112,7 +114,7 @@
             // 
             this.dateTimePicker.CustomFormat = "ddd/ MMM / yyyy   |   HH:mm";
             this.dateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker.Location = new System.Drawing.Point(788, 38);
+            this.dateTimePicker.Location = new System.Drawing.Point(419, 427);
             this.dateTimePicker.MaxDate = new System.DateTime(2022, 12, 31, 0, 0, 0, 0);
             this.dateTimePicker.MinDate = new System.DateTime(2018, 12, 14, 0, 0, 0, 0);
             this.dateTimePicker.Name = "dateTimePicker";
@@ -122,7 +124,7 @@
             // 
             // DatePickerbtn
             // 
-            this.DatePickerbtn.Location = new System.Drawing.Point(710, 241);
+            this.DatePickerbtn.Location = new System.Drawing.Point(328, 617);
             this.DatePickerbtn.Name = "DatePickerbtn";
             this.DatePickerbtn.Size = new System.Drawing.Size(285, 98);
             this.DatePickerbtn.TabIndex = 6;
@@ -223,7 +225,7 @@
             // UsersCheckedListBox
             // 
             this.UsersCheckedListBox.FormattingEnabled = true;
-            this.UsersCheckedListBox.Location = new System.Drawing.Point(710, 88);
+            this.UsersCheckedListBox.Location = new System.Drawing.Point(312, 475);
             this.UsersCheckedListBox.Name = "UsersCheckedListBox";
             this.UsersCheckedListBox.Size = new System.Drawing.Size(136, 124);
             this.UsersCheckedListBox.TabIndex = 18;
@@ -231,7 +233,7 @@
             // TimesCheckedListBox
             // 
             this.TimesCheckedListBox.FormattingEnabled = true;
-            this.TimesCheckedListBox.Location = new System.Drawing.Point(868, 88);
+            this.TimesCheckedListBox.Location = new System.Drawing.Point(501, 475);
             this.TimesCheckedListBox.Name = "TimesCheckedListBox";
             this.TimesCheckedListBox.Size = new System.Drawing.Size(134, 124);
             this.TimesCheckedListBox.TabIndex = 19;
@@ -285,7 +287,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(438, 303);
+            this.label1.Location = new System.Drawing.Point(1093, 254);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 13);
             this.label1.TabIndex = 25;
@@ -293,14 +295,14 @@
             // 
             // cancelAMeetingTextBox
             // 
-            this.cancelAMeetingTextBox.Location = new System.Drawing.Point(427, 337);
+            this.cancelAMeetingTextBox.Location = new System.Drawing.Point(1091, 289);
             this.cancelAMeetingTextBox.Name = "cancelAMeetingTextBox";
             this.cancelAMeetingTextBox.Size = new System.Drawing.Size(100, 20);
             this.cancelAMeetingTextBox.TabIndex = 26;
             // 
             // cancelAMeetingBtn
             // 
-            this.cancelAMeetingBtn.Location = new System.Drawing.Point(427, 380);
+            this.cancelAMeetingBtn.Location = new System.Drawing.Point(1086, 209);
             this.cancelAMeetingBtn.Name = "cancelAMeetingBtn";
             this.cancelAMeetingBtn.Size = new System.Drawing.Size(105, 39);
             this.cancelAMeetingBtn.TabIndex = 27;
@@ -311,7 +313,7 @@
             // UsersCheckedListBoxUpdate
             // 
             this.UsersCheckedListBoxUpdate.FormattingEnabled = true;
-            this.UsersCheckedListBoxUpdate.Location = new System.Drawing.Point(1024, 307);
+            this.UsersCheckedListBoxUpdate.Location = new System.Drawing.Point(695, 263);
             this.UsersCheckedListBoxUpdate.Name = "UsersCheckedListBoxUpdate";
             this.UsersCheckedListBoxUpdate.Size = new System.Drawing.Size(120, 94);
             this.UsersCheckedListBoxUpdate.TabIndex = 28;
@@ -319,7 +321,7 @@
             // TimesCheckedListBoxUpdate
             // 
             this.TimesCheckedListBoxUpdate.FormattingEnabled = true;
-            this.TimesCheckedListBoxUpdate.Location = new System.Drawing.Point(901, 433);
+            this.TimesCheckedListBoxUpdate.Location = new System.Drawing.Point(875, 289);
             this.TimesCheckedListBoxUpdate.Name = "TimesCheckedListBoxUpdate";
             this.TimesCheckedListBoxUpdate.Size = new System.Drawing.Size(120, 94);
             this.TimesCheckedListBoxUpdate.TabIndex = 29;
@@ -327,41 +329,44 @@
             // dateTimePickerUpdate
             // 
             this.dateTimePickerUpdate.CustomFormat = "ddd/ MMM / yyyy   |   HH:mm";
-            this.dateTimePickerUpdate.Location = new System.Drawing.Point(868, 407);
+            this.dateTimePickerUpdate.Location = new System.Drawing.Point(821, 263);
             this.dateTimePickerUpdate.Name = "dateTimePickerUpdate";
             this.dateTimePickerUpdate.Size = new System.Drawing.Size(200, 20);
             this.dateTimePickerUpdate.TabIndex = 30;
             // 
-            // UpdateUsersInMeetingBtn
+            // UsersInMeetingTransferBtn
             // 
-            this.UpdateUsersInMeetingBtn.Location = new System.Drawing.Point(901, 366);
-            this.UpdateUsersInMeetingBtn.Name = "UpdateUsersInMeetingBtn";
-            this.UpdateUsersInMeetingBtn.Size = new System.Drawing.Size(101, 35);
-            this.UpdateUsersInMeetingBtn.TabIndex = 31;
-            this.UpdateUsersInMeetingBtn.Text = "Remove a user from a meeting";
-            this.UpdateUsersInMeetingBtn.UseVisualStyleBackColor = true;
-            this.UpdateUsersInMeetingBtn.Click += new System.EventHandler(this.UpdateUsersInMeetingBtn_Click);
+            this.UsersInMeetingTransferBtn.Enabled = false;
+            this.UsersInMeetingTransferBtn.Location = new System.Drawing.Point(695, 211);
+            this.UsersInMeetingTransferBtn.Name = "UsersInMeetingTransferBtn";
+            this.UsersInMeetingTransferBtn.Size = new System.Drawing.Size(101, 35);
+            this.UsersInMeetingTransferBtn.TabIndex = 31;
+            this.UsersInMeetingTransferBtn.Text = "Remove a user from a meeting";
+            this.UsersInMeetingTransferBtn.UseVisualStyleBackColor = true;
+            this.UsersInMeetingTransferBtn.Click += new System.EventHandler(this.UpdateUsersInMeetingBtn_Click);
             // 
             // UpdateDateTimeBtn
             // 
-            this.UpdateDateTimeBtn.Location = new System.Drawing.Point(889, 538);
+            this.UpdateDateTimeBtn.Enabled = false;
+            this.UpdateDateTimeBtn.Location = new System.Drawing.Point(852, 202);
             this.UpdateDateTimeBtn.Name = "UpdateDateTimeBtn";
             this.UpdateDateTimeBtn.Size = new System.Drawing.Size(132, 53);
             this.UpdateDateTimeBtn.TabIndex = 32;
             this.UpdateDateTimeBtn.Text = "Change the date or time of a meeting";
             this.UpdateDateTimeBtn.UseVisualStyleBackColor = true;
+            this.UpdateDateTimeBtn.Click += new System.EventHandler(this.UpdateDateTimeBtn_Click);
             // 
             // CheckedListBoxMeetingsList
             // 
             this.CheckedListBoxMeetingsList.FormattingEnabled = true;
-            this.CheckedListBoxMeetingsList.Location = new System.Drawing.Point(710, 389);
+            this.CheckedListBoxMeetingsList.Location = new System.Drawing.Point(864, 38);
             this.CheckedListBoxMeetingsList.Name = "CheckedListBoxMeetingsList";
             this.CheckedListBoxMeetingsList.Size = new System.Drawing.Size(120, 94);
             this.CheckedListBoxMeetingsList.TabIndex = 33;
             // 
             // MeetingsListBtn
             // 
-            this.MeetingsListBtn.Location = new System.Drawing.Point(841, 681);
+            this.MeetingsListBtn.Location = new System.Drawing.Point(875, 155);
             this.MeetingsListBtn.Name = "MeetingsListBtn";
             this.MeetingsListBtn.Size = new System.Drawing.Size(98, 33);
             this.MeetingsListBtn.TabIndex = 34;
@@ -372,11 +377,31 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(723, 366);
+            this.label2.Location = new System.Drawing.Point(872, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 35;
             this.label2.Text = "All your meetings";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(712, 374);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 37;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(920, 410);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 38;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // Form1
             // 
@@ -384,11 +409,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ClientSize = new System.Drawing.Size(1234, 802);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.MeetingsListBtn);
             this.Controls.Add(this.CheckedListBoxMeetingsList);
             this.Controls.Add(this.UpdateDateTimeBtn);
-            this.Controls.Add(this.UpdateUsersInMeetingBtn);
+            this.Controls.Add(this.UsersInMeetingTransferBtn);
             this.Controls.Add(this.dateTimePickerUpdate);
             this.Controls.Add(this.TimesCheckedListBoxUpdate);
             this.Controls.Add(this.UsersCheckedListBoxUpdate);
@@ -460,11 +487,13 @@
         private System.Windows.Forms.CheckedListBox UsersCheckedListBoxUpdate;
         private System.Windows.Forms.CheckedListBox TimesCheckedListBoxUpdate;
         private System.Windows.Forms.DateTimePicker dateTimePickerUpdate;
-        private System.Windows.Forms.Button UpdateUsersInMeetingBtn;
+        private System.Windows.Forms.Button UsersInMeetingTransferBtn;
         private System.Windows.Forms.Button UpdateDateTimeBtn;
         private System.Windows.Forms.CheckedListBox CheckedListBoxMeetingsList;
         private System.Windows.Forms.Button MeetingsListBtn;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 
