@@ -15,19 +15,18 @@ namespace Meetings
             MessageBox.Show(Fname);
         }
         //DONE NEED CHECKIN
-        public void SetTimeAndDateOfMeetingsAndUsersForMeetings(string meetingsName, string datesAndTimesOfMeetings , string users)
+        public void SetTimeAndDateOfMeetingsAndUsersForMeetings(string meetingsName, string datesAndTimesOfMeetings, string users)
         {
-            Pairs.AddMeeting(meetingsName, datesAndTimesOfMeetings +"#"+ users);
-        }
 
+        }
         public void ExtendMeetings(string originalMeetingsName, string newDatesAndTimes)
         {
-            Pairs.ExtendMeetings(originalMeetingsName, newDatesAndTimes);
+            
         }
         //DONE NEED CHECKIN
         public void CancelMeetings(string meetingsWantCanceled)
         {
-            Pairs.CancelMeetings(meetingsWantCanceled);
+            
         }
     }
 }

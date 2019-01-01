@@ -8,10 +8,8 @@ using System.Windows.Forms;
 
 namespace Meetings
 {
-    abstract class Users
+    public class Users
     {
-        protected HashMap Pairs;
-        //private Dictionary<String, String> Pairs;
         protected string Fname;
         protected string Lname;
         protected string Fullname;

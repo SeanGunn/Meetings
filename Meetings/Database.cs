@@ -10,6 +10,7 @@ namespace Meetings
     class Database
     {
         private string Name;
+        private string RemoveMeetingName;
         public Database(string Name)
         {
             this.Name = Name;
@@ -23,6 +24,15 @@ namespace Meetings
         public string GetName()
         {
             return this.Name;
+        }
+        public void SetRemoveMeetingName(String value)
+        {
+            this.RemoveMeetingName = value;
+            MessageBox.Show(value);
+        }
+        public string GetRemoveMeetingName()
+        {
+            return this.RemoveMeetingName;
         }
     }
 }

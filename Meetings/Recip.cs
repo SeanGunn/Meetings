@@ -27,7 +27,7 @@ namespace Meetings
         {
             //TODO: Need to re write this
             //base it on hashmap code since its near same 
-            Pairs.RemoveUserFromMeeting(meetingName, user);
+            
         }
     }
 }

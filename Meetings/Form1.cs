@@ -17,6 +17,7 @@ namespace Meetings
     //TODO: Rearange all functions and prob create a class for them and remmove hashmap class
     public partial class Form1 : Form
     {
+        Users user1;
         Init init1;
         Recip recip1;
         private Database database1;
@@ -107,37 +108,102 @@ namespace Meetings
                     insertMeetingsPart3 += ",";
             }
             String insertMeetingsPart4 = ") values ("+ dateOfMeeting+"','"+init1.GetFullName()+"', '" + AmountOfUsersChecked + "', '";
-            String insertMeetingsPart5 = "";
-            String insertMeetingsPart6 = "";
-            foreach (object Item in UsersCheckedListBox.CheckedItems)
-            {
-                insertMeetingsPart5 += Item.ToString();
-                insertMeetingsPart5 += "', '";
-            }
-            for (int i = 0; i < (UsersCheckedListBox.Items.Count)- UsersCheckedListBox.CheckedItems.Count; i++)
-            {
-                insertMeetingsPart6 += "NULL ', '";
-            }
-            String insertMeetingsPart7 = "";
+            //String insertMeetingsPart5 = "";
+            //String insertMeetingsPart6 = "";
+            //foreach (object Item in UsersCheckedListBox.CheckedItems)
+            //{
+            //    insertMeetingsPart5 += Item.ToString();
+            //    insertMeetingsPart5 += "', '";
+            //}
+            //for (int i = 0; i < (UsersCheckedListBox.Items.Count)- UsersCheckedListBox.CheckedItems.Count; i++)
+            //{
+            //    insertMeetingsPart6 += "NULL ', '";
+            //}
+            //String insertMeetingsPart7 = "";
+            //int b = 0;
+            //foreach (object Item in TimesCheckedListBox.CheckedItems)
+            //{   b += 1;
+            //    insertMeetingsPart7 += Item.ToString().Trim();
+            //    if(b != TimesCheckedListBox.CheckedItems.Count)
+            //        insertMeetingsPart7 += "', '";
+                
+            //}
+            //String insertMeetingsPart8 = "";
+            //b = 0;
+            //for (int i = 0; i < (TimesCheckedListBox.Items.Count) - TimesCheckedListBox.CheckedItems.Count; i++)
+            //{
+            //    if ( b!= ((TimesCheckedListBox.Items.Count) - TimesCheckedListBox.CheckedItems.Count))
+            //        insertMeetingsPart8 += "', '";
+            //    insertMeetingsPart8 += "NULL";
+                
+            //}
+            string InsertPartUsersFix = "";
+            string InsertPartTimesFix = "";
             int b = 0;
-            foreach (object Item in TimesCheckedListBox.CheckedItems)
-            {   b += 1;
-                insertMeetingsPart7 += Item.ToString().Trim();
-                if(b != TimesCheckedListBox.CheckedItems.Count)
-                    insertMeetingsPart7 += "', '";
+            List<string> ListOfCheckedItems = new List<string>();
+            List<string> ListOfPossiableCheckedItems = new List<string>();
+            foreach (object ItemChecked in UsersCheckedListBox.CheckedItems)
+             {
+                ListOfCheckedItems.Add(ItemChecked.ToString());
+             }
+            foreach (object Item in UsersCheckedListBox.Items)
+            {
+                ListOfPossiableCheckedItems.Add(Item.ToString());
+            }
+            foreach (string Item in ListOfPossiableCheckedItems)
+            {
+
+                if (ListOfCheckedItems.Contains(Item.ToString()))
+                {
+                    InsertPartUsersFix += Item.ToString();
+                    InsertPartUsersFix += "', '";
+                }
+                else
+                {
+                    InsertPartUsersFix += "NULL ', '";
+                }
+
+            }
+            ListOfCheckedItems.Clear();
+            ListOfPossiableCheckedItems.Clear();
+            List<string> ListOfCheckedItemsTimes = new List<string>();
+            List<string> ListOfPossiableCheckedItemsTimes = new List<string>();
+            foreach (object ItemChecked in TimesCheckedListBox.CheckedItems)
+            {
+                ListOfCheckedItemsTimes.Add(ItemChecked.ToString());
+            }
+            foreach (object Item in TimesCheckedListBox.Items)
+            {
+                ListOfPossiableCheckedItemsTimes.Add(Item.ToString());
+            }
+            int TimesListAmount = TimesCheckedListBox.Items.Count;
+            int counter = 0;
+            int counterPlus = 0;
+            foreach (string Item in ListOfPossiableCheckedItemsTimes)
+            {
+                counter++;
+                counterPlus = counter;
+                if (ListOfCheckedItemsTimes.Contains(Item.ToString()))
+                {
+                    InsertPartTimesFix += Item.ToString();
+                    if((counterPlus + 1) <= TimesListAmount)
+                        InsertPartTimesFix += "', '";
+                }
+                else
+                {
+                    InsertPartTimesFix += "NULL";
+                    if (b != (TimesListAmount) - counter)
+                        InsertPartTimesFix += "', '";
+                    else
+                        MessageBox.Show(InsertPartTimesFix);
+                    
+                }
                 
             }
-            String insertMeetingsPart8 = "";
-            b = 0;
-            for (int i = 0; i < (TimesCheckedListBox.Items.Count) - TimesCheckedListBox.CheckedItems.Count; i++)
-            {
-                if ( b!= ((TimesCheckedListBox.Items.Count) - TimesCheckedListBox.CheckedItems.Count))
-                    insertMeetingsPart8 += "', '";
-                insertMeetingsPart8 += "NULL";
-                b = i + 1;
-            }
-            MessageBox.Show(insertMeetingsPart8);
-            String insertUsersFull = insertMeetingsPart1 + insertMeetingsPart2 + insertMeetingsPart3 + insertMeetingsPart4 + insertMeetingsPart5 + insertMeetingsPart6 + insertMeetingsPart7 + insertMeetingsPart8 + "')";
+            ListOfCheckedItemsTimes.Clear();
+            ListOfPossiableCheckedItemsTimes.Clear();
+            //MessageBox.Show(insertMeetingsPart8);
+            String insertUsersFull = insertMeetingsPart1 + insertMeetingsPart2 + insertMeetingsPart3 + insertMeetingsPart4 + InsertPartUsersFix + InsertPartTimesFix + "')";
             MessageBox.Show(insertUsersFull);
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             SqlConnection cnn = new SqlConnection(ConString);
@@ -270,6 +336,7 @@ namespace Meetings
 
                     cnn.Close();
                 }
+                user1 =  new Users(username, firstName, lastName, password, email);
                 //TODO: need to add button option here to set as either init or recip
                 //That means a bit of rewiting so the later code and I know if the user is a init or recip
                 if ((username == "Mehmet1") && (lastName!=""))
@@ -430,11 +497,15 @@ namespace Meetings
             //}
             //else
             //    MessageBox.Show("Only one at a time please");
-            string meetingsName = cancelAMeetingTextBox.Text;
-            if (meetingsName != "")
-                DropMeeting(meetingsName);
-            else
-                MessageBox.Show("Fill all the data please");
+            List<string> ListOfMeetingsToDrop = new List<string>();
+            foreach(Object item in CheckedListBoxMeetingsList.CheckedItems)
+            {
+                ListOfMeetingsToDrop.Add(item.ToString());
+            }
+            foreach(string a in ListOfMeetingsToDrop)
+            {
+                DropMeeting(a);
+            }
             MeetingList();
             CheckedListBoxMeetingsList.ClearSelected();
             foreach (int i in CheckedListBoxMeetingsList.CheckedIndices)
@@ -497,10 +568,12 @@ namespace Meetings
 
         private void UpdateUsersInMeetingBtn_Click(object sender, EventArgs e)
         {
+
+            List<string> usersInThatMeeting = new List<string>();
             //TODO: TURNS ON REMOVE USERS
             if(CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
             {
-                List<string> usersInThatMeeting = new List<string>();
+                
                 AllYourMeetingsUsersList(usersInThatMeeting);
                 foreach (string b in usersInThatMeeting)
                 {
@@ -512,11 +585,22 @@ namespace Meetings
             }
             else
                 MessageBox.Show("Only one at a time please");
+            MeetingList();
             CheckedListBoxMeetingsList.ClearSelected();
             foreach (int i in CheckedListBoxMeetingsList.CheckedIndices)
             {
                 CheckedListBoxMeetingsList.SetItemCheckState(i, CheckState.Unchecked);
             }
+
+            foreach (String user in usersInThatMeeting)
+            {
+                //if(user != init1.GetFullName())
+                //    UsersCheckedListBox.Items.Add(user);
+                UsersCheckedListBoxUpdate.Items.Add(user);
+            }
+
+            //TODO: When rearraging i need have it not show current user
+
         }
 
         private void AllYourMeetingsUsersList(List<string> usersInThatMeeting)
@@ -536,6 +620,7 @@ namespace Meetings
             foreach (String nameOfMeeting in namesMeetingDatabase)
             {
                 String command = "Select * from " + nameOfMeeting + ";";
+                database1.SetRemoveMeetingName(nameOfMeeting);
                 SqlConnection cnn = new SqlConnection(ConString);
                 try
                 {
@@ -596,8 +681,6 @@ namespace Meetings
             //{
             //    CheckedListBoxMeetingsList.SetItemCheckState(i, CheckState.Unchecked);
             //}
-            UsersInMeetingTransferBtn.Enabled = true;
-            UpdateDateTimeBtn.Enabled = true;
         }
 
         private void MeetingList()
@@ -662,14 +745,104 @@ namespace Meetings
             }
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void UpdateRemovedUsersBtn_Click(object sender, EventArgs e)
         {
             //TODO: REMOVE CLICKED USER FROM DATABASE
+            List<string> usersRemoveMeeting = new List<string>();
+            List<int> intAmountInMeetingList = new List<int>();
+            int intAmountInMeeting = 0;
+            int amountIn = 0;
+            foreach (object Item in UsersCheckedListBoxUpdate.CheckedItems)
+            {
+                usersRemoveMeeting.Add(Item.ToString());
+            }
+            
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            string com = "Update "+database1.GetRemoveMeetingName()+" set ;";
+            
+            SqlConnection cnn = new SqlConnection(ConString);
+            try
+            {
+                String command = "Select * from " + database1.GetRemoveMeetingName() + ";";
+                SqlCommand oCmd = new SqlCommand(command, cnn);
+                cnn.Open();
+                using (SqlDataReader oReader = oCmd.ExecuteReader())
+                {
+                    while (oReader.Read())
+                    {
+                        intAmountInMeeting = oReader.GetInt32(2);
+                        if (intAmountInMeeting > amountIn)
+                            amountIn = intAmountInMeeting;
+                        intAmountInMeetingList.Add(intAmountInMeeting);
+                    }
+                    cnn.Close();
+                }
+                string command2 = "UPDATE " + database1.GetRemoveMeetingName() + " SET " + SetRemoveSetUpdate(usersRemoveMeeting, amountIn) + " WHERE MeetingOwner = '"+init1.GetFullName()+"';";
+                cnn.Open();
+                using (SqlCommand com2 = new SqlCommand(command2, cnn))
+                    com2.ExecuteNonQuery();
+                cnn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            UsersCheckedListBox.ClearSelected();
+            foreach (int i in TimesCheckedListBox.CheckedIndices)
+            {
+                TimesCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
+            }
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        private void UpdateTimesAndDataBtn_Click(object sender, EventArgs e)
         {
             //TODO: CHANGE TIME OF MEETING
+        }
+
+        private void RemoveSelfMeetingBtn_Click(object sender, EventArgs e)
+        {
+            //TODO: Reads the users name then removes from the meeting have it donr last since i need to set up the recip first
+        }
+
+        private string SetRemoveSetUpdate(List<string> usersRemoveMeeting, int AmountIn)
+        {
+            //TODO: chnage it so it only does its row. read the idices that the users name is then set a as that number, This is basicly the same for time and date would just chnage the date to the new pick
+            string b = "";
+            //string usersUse = "";
+            //int amount0fnames = 0;
+            //foreach(string users in usersRemoveMeeting)
+            //{
+            //    usersUse += users+ " ";
+            //    ++amount0fnames;
+            //}
+            //int a = 1;
+            //while (a <= AmountIn)
+            //{
+            //    if(a<= amount0fnames)
+            //    {
+
+            //    }
+            //    b += "UsersInMeeting" + a + " = 'NULL' ";
+            //    ++a;
+            //    if (a <= AmountIn)
+            //        b += ",";
+            //}
+            return b;
+        }
+
+        private void PefenAndExclTimesBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CreateUserInitBtn_Click(object sender, EventArgs e)
+        {
+            init1 = new Init(user1.GetUsername(),user1.GetFName(),user1.GetLName(),user1.GetPassword(),user1.GetEmail());
+        }
+
+        private void CreateUserRecipBtn_Click(object sender, EventArgs e)
+        {
+            recip1 = new Recip(user1.GetUsername(), user1.GetFName(), user1.GetLName(), user1.GetPassword(), user1.GetEmail());
         }
     }
 }
