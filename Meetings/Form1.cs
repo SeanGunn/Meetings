@@ -86,7 +86,7 @@ namespace Meetings
             }
             MessageBox.Show(checkedItemsUsers);
             string MeetingsDatabaseName = database1.GetName();
-            String insertMeetingsPart1 = "Insert into " + MeetingsDatabaseName + " (MeetingDate ,MeetingOwner,AmountInMeeting,";
+            String insertMeetingsPart1 = "Insert into " + MeetingsDatabaseName + " (MeetingName, MeetingDate ,MeetingOwner,AmountInMeeting,";
             String insertMeetingsPart2 = "";
             String user = "UsersInMeeting";
             String insertMeetingsPart3 = "";
@@ -107,7 +107,7 @@ namespace Meetings
                 if(a != TimesCheckedListBox.Items.Count)
                     insertMeetingsPart3 += ",";
             }
-            String insertMeetingsPart4 = ") values ("+ dateOfMeeting+"','"+init1.GetFullName()+"', '" + AmountOfUsersChecked + "', '";
+            String insertMeetingsPart4 = ") values ('"+ MeetingsDatabaseName+"'," + dateOfMeeting+"','"+init1.GetFullName()+"', '" + AmountOfUsersChecked + "', '";
             //String insertMeetingsPart5 = "";
             //String insertMeetingsPart6 = "";
             //foreach (object Item in UsersCheckedListBox.CheckedItems)
@@ -314,6 +314,7 @@ namespace Meetings
         
         private void UserExists(string username, string password)
         {
+            string Password = "";
             string firstName = "";
             string lastName = "";
             string email = "";
@@ -330,34 +331,36 @@ namespace Meetings
                     {
                         firstName = oReader["FirstName"].ToString();
                         lastName = oReader["Surname"].ToString();
-                        password = oReader["Password"].ToString();
+                        Password = oReader["Password"].ToString();
                         email = oReader["Email"].ToString();
                     }
 
                     cnn.Close();
                 }
-                user1 =  new Users(username, firstName, lastName, password, email);
-                //TODO: need to add button option here to set as either init or recip
-                //That means a bit of rewiting so the later code and I know if the user is a init or recip
-                if ((username == "Mehmet1") && (lastName!=""))
+                if(Password.Trim() == password)
                 {
-                    //later change so anyone can be init
-                    init1 = new Init(username, firstName, lastName, password, email);
-                    MessageBox.Show(init1.ToString());
-                    MeetingList();
-                }
-                else if((username != "Mehmet1") && (lastName != ""))
-                {
-                    recip1 = new Recip(username, firstName, lastName, password, email);
-                    MessageBox.Show(recip1.ToString());
-                    //TODO: DEACTERATE OTHER BUTTIONS AND LISTS
-                    //TODO: SHOWS ALL THEIR MEETINGS THEY ARE IN
+                    user1 =  new Users(username, firstName, lastName, password, email);
                 }
                 else
                 {
                     MessageBox.Show("User doesn't exist.");
                 }
-            }  
+            }  ////TODO: need to add button option here to set as either init or recip
+                ////That means a bit of rewiting so the later code and I know if the user is a init or recip
+                //if ((username == "Mehmet1") && (lastName!=""))
+                //{
+                //    //later change so anyone can be init
+                //    init1 = new Init(username, firstName, lastName, password, email);
+                //    MessageBox.Show(init1.ToString());
+                //    MeetingList();
+                //}
+                //else if((username != "Mehmet1") && (lastName != ""))
+                //{
+                //    recip1 = new Recip(username, firstName, lastName, password, email);
+                //    MessageBox.Show(recip1.ToString());
+                //    //TODO: DEACTERATE OTHER BUTTIONS AND LISTS
+                //    //TODO: SHOWS ALL THEIR MEETINGS THEY ARE IN
+                //}
         }
 
         private void CreateMeetingsNameBtn_Click(object sender, EventArgs e)
@@ -392,7 +395,7 @@ namespace Meetings
                         MessageBox.Show("Meeting called " + meetingsName+ " is being set");
                         try
                         {
-                            String insertMeetingsPart1 = "CREATE TABLE[dbo].["+ meetingsName + "] (MeetingDate varchar(20), MeetingOwner varchar(20), AmountInMeeting INT,";
+                            String insertMeetingsPart1 = "CREATE TABLE[dbo].["+ meetingsName + "] (MeetingName varchar(20), MeetingDate varchar(20), MeetingOwner varchar(20), AmountInMeeting INT,";
                             String insertMeetingsPart2 = "";
                             String user = "UsersInMeeting";
                             String insertMeetingsPart3 = "";
@@ -838,11 +841,14 @@ namespace Meetings
         private void CreateUserInitBtn_Click(object sender, EventArgs e)
         {
             init1 = new Init(user1.GetUsername(),user1.GetFName(),user1.GetLName(),user1.GetPassword(),user1.GetEmail());
+            MeetingList();
         }
 
         private void CreateUserRecipBtn_Click(object sender, EventArgs e)
         {
             recip1 = new Recip(user1.GetUsername(), user1.GetFName(), user1.GetLName(), user1.GetPassword(), user1.GetEmail());
+            //TODO: make sure meeting list works with recip
+            //MeetingList();
         }
     }
 }
