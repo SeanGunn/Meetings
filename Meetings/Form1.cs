@@ -108,35 +108,6 @@ namespace Meetings
                     insertMeetingsPart3 += ",";
             }
             String insertMeetingsPart4 = ") values ('"+ MeetingsDatabaseName+"'," + dateOfMeeting+"','"+init1.GetFullName()+"', '" + AmountOfUsersChecked + "', '";
-            //String insertMeetingsPart5 = "";
-            //String insertMeetingsPart6 = "";
-            //foreach (object Item in UsersCheckedListBox.CheckedItems)
-            //{
-            //    insertMeetingsPart5 += Item.ToString();
-            //    insertMeetingsPart5 += "', '";
-            //}
-            //for (int i = 0; i < (UsersCheckedListBox.Items.Count)- UsersCheckedListBox.CheckedItems.Count; i++)
-            //{
-            //    insertMeetingsPart6 += "NULL ', '";
-            //}
-            //String insertMeetingsPart7 = "";
-            //int b = 0;
-            //foreach (object Item in TimesCheckedListBox.CheckedItems)
-            //{   b += 1;
-            //    insertMeetingsPart7 += Item.ToString().Trim();
-            //    if(b != TimesCheckedListBox.CheckedItems.Count)
-            //        insertMeetingsPart7 += "', '";
-                
-            //}
-            //String insertMeetingsPart8 = "";
-            //b = 0;
-            //for (int i = 0; i < (TimesCheckedListBox.Items.Count) - TimesCheckedListBox.CheckedItems.Count; i++)
-            //{
-            //    if ( b!= ((TimesCheckedListBox.Items.Count) - TimesCheckedListBox.CheckedItems.Count))
-            //        insertMeetingsPart8 += "', '";
-            //    insertMeetingsPart8 += "NULL";
-                
-            //}
             string InsertPartUsersFix = "";
             string InsertPartTimesFix = "";
             int b = 0;
@@ -160,7 +131,7 @@ namespace Meetings
                 }
                 else
                 {
-                    InsertPartUsersFix += "NULL ', '";
+                    InsertPartUsersFix += "', '";
                 }
 
             }
@@ -191,7 +162,7 @@ namespace Meetings
                 }
                 else
                 {
-                    InsertPartTimesFix += "NULL";
+                    InsertPartTimesFix += "";
                     if (b != (TimesListAmount) - counter)
                         InsertPartTimesFix += "', '";
                     else
@@ -289,6 +260,7 @@ namespace Meetings
             cnn.Open();
             sc1 = new SqlCommand(amountIdsString, cnn);
             int amountIds = (int)sc1.ExecuteScalar();
+            amountIds++;
             cnn.Close();
             if (itContains == false)
             {
@@ -486,20 +458,6 @@ namespace Meetings
 
         private void CancelAMeetingBtn_Click(object sender, EventArgs e)
         {//TODO: Can turn this into a list based on owner of meeting
-            //if (CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
-            //{
-            //    List<string> usersInThatMeeting = new List<string>();
-            //    AllYourMeetingsUsersList(usersInThatMeeting);
-            //    foreach (string b in usersInThatMeeting)
-            //    {
-            //        MessageBox.Show(b);
-            //    }
-            //    MessageBox.Show(usersInThatMeeting.Count.ToString());
-            //    UsersInMeetingTransferBtn.Enabled = true;
-            //    UpdateDateTimeBtn.Enabled = true;
-            //}
-            //else
-            //    MessageBox.Show("Only one at a time please");
             List<string> ListOfMeetingsToDrop = new List<string>();
             foreach(Object item in CheckedListBoxMeetingsList.CheckedItems)
             {
@@ -515,11 +473,14 @@ namespace Meetings
             {
                 CheckedListBoxMeetingsList.SetItemCheckState(i, CheckState.Unchecked);
             }
+            UsersCheckedListBoxUpdate.Items.Clear();
         }
 
         private void PublicBtn_Click(object sender, EventArgs e)
         {
             string[] meetingTimes = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00" };
+            UsersCheckedListBox.Items.Clear();
+            AddUsersToUsersCheckedList();
             TimesCheckedListBox.Items.Clear();
             TimesCheckedListBox.Items.AddRange(meetingTimes);
         }
@@ -527,6 +488,8 @@ namespace Meetings
         private void PrivateBtn_Click(object sender, EventArgs e)
         {
             string[] meetingTimes = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00" };
+            UsersCheckedListBox.Items.Clear();
+            AddUsersToUsersCheckedList();
             TimesCheckedListBox.Items.Clear();
             TimesCheckedListBox.Items.AddRange(meetingTimes);
         }
@@ -571,7 +534,7 @@ namespace Meetings
 
         private void UpdateUsersInMeetingBtn_Click(object sender, EventArgs e)
         {
-
+            UsersCheckedListBoxUpdate.Items.Clear();
             List<string> usersInThatMeeting = new List<string>();
             //TODO: TURNS ON REMOVE USERS
             if(CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
@@ -615,6 +578,7 @@ namespace Meetings
             string personName = "";
             int intAmountInMeeting = 0;
             int a = 1;
+            int b = 1;
             foreach (object Item in CheckedListBoxMeetingsList.CheckedItems)
             {
                 meetingName += Item.ToString();
@@ -634,19 +598,21 @@ namespace Meetings
                         while (oReader.Read())
                         {
                             a = 1;
-                            intAmountInMeeting = oReader.GetInt32(2);
+                            b = 1;
+                            intAmountInMeeting = oReader.GetInt32(3);
                             
                             while (a <= (intAmountInMeeting))
                             {
-                                personName = oReader.GetString((a + 2));
-                                if (usersInThatMeeting.Contains(personName))
+                                personName = oReader.GetString((b + 3));
+                                if ((usersInThatMeeting.Contains(personName) && (personName == ""))||(personName == ""))
                                 {
-                                    a++;
+                                    b++;
                                 }
                                 else
                                 {
                                     usersInThatMeeting.Add(personName);
                                     a++;
+                                    b++;
                                 }
                             }
                         }
@@ -658,9 +624,9 @@ namespace Meetings
                     MessageBox.Show(ex.ToString());
                 }
             }
-            foreach (string b in usersInThatMeeting)
+            foreach (string users in usersInThatMeeting)
             {
-                MessageBox.Show(b);
+                MessageBox.Show(users);
             }
             MessageBox.Show(usersInThatMeeting.Count.ToString());
         }
@@ -773,14 +739,14 @@ namespace Meetings
                 {
                     while (oReader.Read())
                     {
-                        intAmountInMeeting = oReader.GetInt32(2);
+                        intAmountInMeeting = oReader.GetInt32(3);
                         if (intAmountInMeeting > amountIn)
                             amountIn = intAmountInMeeting;
                         intAmountInMeetingList.Add(intAmountInMeeting);
                     }
                     cnn.Close();
                 }
-                string command2 = "UPDATE " + database1.GetRemoveMeetingName() + " SET " + SetRemoveSetUpdate(usersRemoveMeeting, amountIn) + " WHERE MeetingOwner = '"+init1.GetFullName()+"';";
+                string command2 = "UPDATE " + database1.GetRemoveMeetingName() + " SET " + SetRemoveSetUpdate(usersRemoveMeeting, amountIn) +", AmountInMeeting ="+ (intAmountInMeeting- UsersCheckedListBoxUpdate.CheckedItems.Count) + " WHERE MeetingOwner = '" + init1.GetFullName() + "';";
                 cnn.Open();
                 using (SqlCommand com2 = new SqlCommand(command2, cnn))
                     com2.ExecuteNonQuery();
@@ -795,6 +761,8 @@ namespace Meetings
             {
                 TimesCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
             }
+            MeetingList();
+            UsersCheckedListBoxUpdate.Items.Clear();
         }
 
         private void UpdateTimesAndDataBtn_Click(object sender, EventArgs e)
@@ -809,27 +777,88 @@ namespace Meetings
 
         private string SetRemoveSetUpdate(List<string> usersRemoveMeeting, int AmountIn)
         {
+            List<string> everyUserInMeeting = new List<string>();
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            int intAmountInMeeting = 0;
+            string allUsersNames = "";
+            SqlConnection cnn = new SqlConnection(ConString);
+            try
+            {
+                String command = "Select * from " + database1.GetRemoveMeetingName() + ";";
+                SqlCommand oCmd = new SqlCommand(command, cnn);
+                cnn.Open();
+                using (SqlDataReader oReader = oCmd.ExecuteReader())
+                {
+                    int aba = 0;
+                    int stringNamesStart = 4;
+                    while (oReader.Read())
+                    {
+                        intAmountInMeeting = oReader.GetInt32(3);
+                        while(aba < intAmountInMeeting)
+                        {
+                            allUsersNames= oReader.GetString(stringNamesStart);
+                            if(allUsersNames == "")
+                            {
+                                everyUserInMeeting.Add(stringNamesStart.ToString());
+                            }
+                            else
+                            {
+                                everyUserInMeeting.Add(allUsersNames);
+                                aba++;
+                            }
+                            stringNamesStart++;
+                            
+                        }
+                        
+                    }
+                    string mm = "";
+                    foreach(string m in everyUserInMeeting)
+                    {
+                        mm += m + "";
+                    }
+                    MessageBox.Show(mm);
+                    cnn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
             //TODO: chnage it so it only does its row. read the idices that the users name is then set a as that number, This is basicly the same for time and date would just chnage the date to the new pick
             string b = "";
-            //string usersUse = "";
-            //int amount0fnames = 0;
-            //foreach(string users in usersRemoveMeeting)
-            //{
-            //    usersUse += users+ " ";
-            //    ++amount0fnames;
-            //}
-            //int a = 1;
-            //while (a <= AmountIn)
-            //{
-            //    if(a<= amount0fnames)
-            //    {
-
-            //    }
-            //    b += "UsersInMeeting" + a + " = 'NULL' ";
-            //    ++a;
-            //    if (a <= AmountIn)
-            //        b += ",";
-            //}
+            int ifMoreThan1user = 0;
+            foreach(string users in usersRemoveMeeting)
+            {
+                int positionOfUser = 0;
+                
+                int maxUsersInMeeting = everyUserInMeeting.Count;
+                int counter = 0;
+                while (counter < maxUsersInMeeting)
+                {
+                    if (everyUserInMeeting.ElementAt(positionOfUser).Equals(users)&& (usersRemoveMeeting.Count == 1))
+                    {
+                        int a = positionOfUser + 1;
+                        b += "UsersInMeeting" + a + "= ''";
+                    }
+                    if((usersRemoveMeeting.Count > 1)&& (everyUserInMeeting.ElementAt(positionOfUser).Equals(users)))
+                    {
+                        int a = positionOfUser + 1;
+                        ++ifMoreThan1user;
+                        if(ifMoreThan1user == 1)
+                        {
+                            b += "UsersInMeeting" + a + "= ''";
+                        }
+                        else
+                        {
+                            b += ", UsersInMeeting" + a + "= ''";
+                        }
+                    }
+                    ++positionOfUser;
+                    counter++;
+                }
+                
+            }
+            MessageBox.Show(b);
             return b;
         }
 
@@ -840,15 +869,22 @@ namespace Meetings
 
         private void CreateUserInitBtn_Click(object sender, EventArgs e)
         {
+            //TODO: SHOWS ONLY CREATE MEMU
             init1 = new Init(user1.GetUsername(),user1.GetFName(),user1.GetLName(),user1.GetPassword(),user1.GetEmail());
             MeetingList();
         }
 
         private void CreateUserRecipBtn_Click(object sender, EventArgs e)
         {
+            //TODO: SHOWS ONLY MEETINGS IN MEMU
             recip1 = new Recip(user1.GetUsername(), user1.GetFName(), user1.GetLName(), user1.GetPassword(), user1.GetEmail());
             //TODO: make sure meeting list works with recip
             //MeetingList();
+        }
+
+        private void EditMeetingsBtn_Click(object sender, EventArgs e)
+        {
+            //TODO: SHOWS ONLY EDIT MEMU
         }
     }
 }

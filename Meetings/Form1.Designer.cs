@@ -60,7 +60,6 @@
             this.UsersInMeetingTransferBtn = new System.Windows.Forms.Button();
             this.UpdateDateTimeBtn = new System.Windows.Forms.Button();
             this.CheckedListBoxMeetingsList = new System.Windows.Forms.CheckedListBox();
-            this.MeetingsListBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.UpdateRemovedUsersBtn = new System.Windows.Forms.Button();
             this.UpdateTimesAndDataBtn = new System.Windows.Forms.Button();
@@ -68,6 +67,7 @@
             this.PefenAndExclTimesBtn = new System.Windows.Forms.Button();
             this.CreateUserInitBtn = new System.Windows.Forms.Button();
             this.CreateUserRecipBtn = new System.Windows.Forms.Button();
+            this.EditMeetingsBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Loginbtn
@@ -348,16 +348,6 @@
             this.CheckedListBoxMeetingsList.Size = new System.Drawing.Size(120, 94);
             this.CheckedListBoxMeetingsList.TabIndex = 33;
             // 
-            // MeetingsListBtn
-            // 
-            this.MeetingsListBtn.Location = new System.Drawing.Point(875, 155);
-            this.MeetingsListBtn.Name = "MeetingsListBtn";
-            this.MeetingsListBtn.Size = new System.Drawing.Size(98, 33);
-            this.MeetingsListBtn.TabIndex = 34;
-            this.MeetingsListBtn.Text = "All your meetings";
-            this.MeetingsListBtn.UseVisualStyleBackColor = true;
-            this.MeetingsListBtn.Click += new System.EventHandler(this.MeetingsListBtn_Click);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -409,7 +399,7 @@
             // 
             // CreateUserInitBtn
             // 
-            this.CreateUserInitBtn.Location = new System.Drawing.Point(344, 55);
+            this.CreateUserInitBtn.Location = new System.Drawing.Point(322, 55);
             this.CreateUserInitBtn.Name = "CreateUserInitBtn";
             this.CreateUserInitBtn.Size = new System.Drawing.Size(104, 72);
             this.CreateUserInitBtn.TabIndex = 41;
@@ -419,7 +409,7 @@
             // 
             // CreateUserRecipBtn
             // 
-            this.CreateUserRecipBtn.Location = new System.Drawing.Point(501, 55);
+            this.CreateUserRecipBtn.Location = new System.Drawing.Point(547, 55);
             this.CreateUserRecipBtn.Name = "CreateUserRecipBtn";
             this.CreateUserRecipBtn.Size = new System.Drawing.Size(112, 72);
             this.CreateUserRecipBtn.TabIndex = 42;
@@ -427,12 +417,23 @@
             this.CreateUserRecipBtn.UseVisualStyleBackColor = true;
             this.CreateUserRecipBtn.Click += new System.EventHandler(this.CreateUserRecipBtn_Click);
             // 
+            // EditMeetingsBtn
+            // 
+            this.EditMeetingsBtn.Location = new System.Drawing.Point(432, 55);
+            this.EditMeetingsBtn.Name = "EditMeetingsBtn";
+            this.EditMeetingsBtn.Size = new System.Drawing.Size(109, 72);
+            this.EditMeetingsBtn.TabIndex = 43;
+            this.EditMeetingsBtn.Text = "Edit some set meetings";
+            this.EditMeetingsBtn.UseVisualStyleBackColor = true;
+            this.EditMeetingsBtn.Click += new System.EventHandler(this.EditMeetingsBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ClientSize = new System.Drawing.Size(1234, 802);
+            this.Controls.Add(this.EditMeetingsBtn);
             this.Controls.Add(this.CreateUserRecipBtn);
             this.Controls.Add(this.CreateUserInitBtn);
             this.Controls.Add(this.PefenAndExclTimesBtn);
@@ -440,7 +441,6 @@
             this.Controls.Add(this.UpdateTimesAndDataBtn);
             this.Controls.Add(this.UpdateRemovedUsersBtn);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.MeetingsListBtn);
             this.Controls.Add(this.CheckedListBoxMeetingsList);
             this.Controls.Add(this.UpdateDateTimeBtn);
             this.Controls.Add(this.UsersInMeetingTransferBtn);
@@ -514,7 +514,6 @@
         private System.Windows.Forms.Button UsersInMeetingTransferBtn;
         private System.Windows.Forms.Button UpdateDateTimeBtn;
         private System.Windows.Forms.CheckedListBox CheckedListBoxMeetingsList;
-        private System.Windows.Forms.Button MeetingsListBtn;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button UpdateRemovedUsersBtn;
         private System.Windows.Forms.Button UpdateTimesAndDataBtn;
@@ -522,6 +521,7 @@
         private System.Windows.Forms.Button PefenAndExclTimesBtn;
         private System.Windows.Forms.Button CreateUserInitBtn;
         private System.Windows.Forms.Button CreateUserRecipBtn;
+        private System.Windows.Forms.Button EditMeetingsBtn;
     }
 }
 
