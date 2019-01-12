@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,13 +12,23 @@ namespace Meetings
     {
         private string Name;
         private string RemoveMeetingName;
-        private List<string> UpdateMeetingDate;
-        private List<string> UpdateMeetingName;
+        private List<string> UpdateMeetingDate = new List<string>();
+        private string Public = "false";
+        private List<string> UpdateMeetingName = new List<string>();
+        string a = "";
         public Database(string Name)
         {
             this.Name = Name;
         }
+        public void SetPublic(string value)
+        {
+            this.Public = value;
+        }
 
+        public string GetPublic()
+        {
+            return this.Public;
+        }
         public void SetName(String value)
         {
             this.Name = value;
@@ -45,9 +56,9 @@ namespace Meetings
         {
             UpdateMeetingDate.Clear();
         }
-        public List<string> GetUpdateMeetingDate()
+        public string GetUpdateMeetingDate(int value)
         {
-            return this.UpdateMeetingDate;
+            return UpdateMeetingDate.ElementAt(value);
         }
         public void AddUpdateMeetingName(String value)
         {
@@ -58,9 +69,15 @@ namespace Meetings
         {
             UpdateMeetingName.Clear();
         }
-        public List<string> GetUpdateMeetingName()
+        public string GetUpdateMeetingName(int value)
         {
-            return this.UpdateMeetingName;
+            return UpdateMeetingName.ElementAt(value);
         }
+
+        //public string GetUPMN(int value)
+        //{
+        //     return this.a  = GetUpdateMeetingName(value).ToString();
+        //}
+
     }
 }

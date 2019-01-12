@@ -61,146 +61,187 @@ namespace Meetings
 
         private void DatePickerbtn_Click(object sender, EventArgs e)
         {
-            //TODO: IF public was pressed need to vaidate insertUser string or else it will be the wrong date
-            int day = dateTimePicker.Value.Day;
-            int month = dateTimePicker.Value.Month;
-            int year = dateTimePicker.Value.Year;
-
-            MessageBox.Show(""+day+ " " + month + " " + year);
-
-            string checkedItemsTimes = string.Empty;
-            foreach (object Item in TimesCheckedListBox.CheckedItems)
-            {
-                checkedItemsTimes += Item.ToString().Trim();
-                checkedItemsTimes += ",";
-            }
-            MessageBox.Show(checkedItemsTimes);
-
-            int AmountOfUsersChecked = UsersCheckedListBox.CheckedItems.Count;
-            MessageBox.Show(AmountOfUsersChecked.ToString());
-            string checkedItemsUsers = string.Empty;
-            foreach (object Item in UsersCheckedListBox.CheckedItems)
-            {
-                checkedItemsUsers += Item.ToString().Trim();
-                checkedItemsUsers += ",";
-            }
-            MessageBox.Show(checkedItemsUsers);
-            string MeetingsDatabaseName = database1.GetName();
-            String insertMeetingsPart1 = "Insert into " + MeetingsDatabaseName + " (MeetingName, MeetingDate ,MeetingOwner,AmountInMeeting,";
-            String insertMeetingsPart2 = "";
-            String user = "UsersInMeeting";
-            String insertMeetingsPart3 = "";
-            String time = "TimeOfMeetings";
-            int a = 0;
-            String dateOfMeeting = "'" + day + "/" + month + "/" + year;
-            for (int i = 0; i < UsersCheckedListBox.Items.Count; i++)
-            {
-                a = i + 1;
-                insertMeetingsPart2 += "" + user + a;
-                insertMeetingsPart2 += ",";
-            }
-            a = 0;
-            for (int i = 0; i < TimesCheckedListBox.Items.Count; i++)
-            {
-                a = i + 1;
-                insertMeetingsPart3 += "" + time + a;
-                if(a != TimesCheckedListBox.Items.Count)
-                    insertMeetingsPart3 += ",";
-            }
-            String insertMeetingsPart4 = ") values ('"+ MeetingsDatabaseName+"'," + dateOfMeeting+"','"+init1.GetFullName()+"', '" + AmountOfUsersChecked + "', '";
-            string InsertPartUsersFix = "";
-            string InsertPartTimesFix = "";
-            int b = 0;
-            List<string> ListOfCheckedItems = new List<string>();
-            List<string> ListOfPossiableCheckedItems = new List<string>();
-            foreach (object ItemChecked in UsersCheckedListBox.CheckedItems)
-             {
-                ListOfCheckedItems.Add(ItemChecked.ToString());
-             }
-            foreach (object Item in UsersCheckedListBox.Items)
-            {
-                ListOfPossiableCheckedItems.Add(Item.ToString());
-            }
-            foreach (string Item in ListOfPossiableCheckedItems)
-            {
-
-                if (ListOfCheckedItems.Contains(Item.ToString()))
-                {
-                    InsertPartUsersFix += Item.ToString();
-                    InsertPartUsersFix += "', '";
-                }
-                else
-                {
-                    InsertPartUsersFix += "', '";
-                }
-
-            }
-            ListOfCheckedItems.Clear();
-            ListOfPossiableCheckedItems.Clear();
-            List<string> ListOfCheckedItemsTimes = new List<string>();
-            List<string> ListOfPossiableCheckedItemsTimes = new List<string>();
-            foreach (object ItemChecked in TimesCheckedListBox.CheckedItems)
-            {
-                ListOfCheckedItemsTimes.Add(ItemChecked.ToString());
-            }
-            foreach (object Item in TimesCheckedListBox.Items)
-            {
-                ListOfPossiableCheckedItemsTimes.Add(Item.ToString());
-            }
-            int TimesListAmount = TimesCheckedListBox.Items.Count;
-            int counter = 0;
-            int counterPlus = 0;
-            foreach (string Item in ListOfPossiableCheckedItemsTimes)
-            {
-                counter++;
-                counterPlus = counter;
-                if (ListOfCheckedItemsTimes.Contains(Item.ToString()))
-                {
-                    InsertPartTimesFix += Item.ToString();
-                    if((counterPlus + 1) <= TimesListAmount)
-                        InsertPartTimesFix += "', '";
-                }
-                else
-                {
-                    InsertPartTimesFix += "";
-                    if (b != (TimesListAmount) - counter)
-                        InsertPartTimesFix += "', '";
-                    else
-                        MessageBox.Show(InsertPartTimesFix);
-                    
-                }
-                
-            }
-            ListOfCheckedItemsTimes.Clear();
-            ListOfPossiableCheckedItemsTimes.Clear();
-            //MessageBox.Show(insertMeetingsPart8);
-            String insertUsersFull = insertMeetingsPart1 + insertMeetingsPart2 + insertMeetingsPart3 + insertMeetingsPart4 + InsertPartUsersFix + InsertPartTimesFix + "')";
-            MessageBox.Show(insertUsersFull);
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
-            SqlConnection cnn = new SqlConnection(ConString);
+            string MeetingsDatabaseName = database1.GetName();
+            String howManyMeetingsSet = "Select COUNT("+ MeetingsDatabaseName + "ID)  from" + MeetingsDatabaseName + ";";
+            Int32 count = 0;
             try
             {
-                SqlCommand oCmd = new SqlCommand(insertUsersFull, cnn);
+                SqlConnection cnn = new SqlConnection(ConString);
+
+                SqlCommand comm = new SqlCommand(howManyMeetingsSet, cnn);
+
                 cnn.Open();
-                oCmd.ExecuteNonQuery();
-                oCmd.Dispose();
+                count = Convert.ToInt32(comm.ExecuteScalar());
                 cnn.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
-            //later have so anyone can be MeetingOwner using buttons
-            TimesCheckedListBox.ClearSelected();
-            UsersCheckedListBox.ClearSelected();
-            foreach (int i in TimesCheckedListBox.CheckedIndices)
+            if (count <= 1)
             {
-                TimesCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
+                //TODO: IF public was pressed need to vaidate insertUser string or else it will be the wrong date
+                int day = dateTimePicker.Value.Day;
+                int month = dateTimePicker.Value.Month;
+                int year = dateTimePicker.Value.Year;
+
+                MessageBox.Show("" + day + " " + month + " " + year);
+
+                string checkedItemsTimes = string.Empty;
+                foreach (object Item in TimesCheckedListBox.CheckedItems)
+                {
+                    checkedItemsTimes += Item.ToString().Trim();
+                    checkedItemsTimes += ",";
+                }
+                MessageBox.Show(checkedItemsTimes);
+
+                int AmountOfUsersChecked = UsersCheckedListBox.CheckedItems.Count;
+                int AmountOfUsersPossiable = UsersCheckedListBox.Items.Count;
+                MessageBox.Show(AmountOfUsersChecked.ToString());
+                string checkedItemsUsers = string.Empty;
+                foreach (object Item in UsersCheckedListBox.CheckedItems)
+                {
+                    checkedItemsUsers += Item.ToString().Trim();
+                    checkedItemsUsers += ",";
+                }
+                MessageBox.Show(checkedItemsUsers);
+                int amountIds = 1;
+                String amountInAlready = "Select Count(*) from" + MeetingsDatabaseName + ";";
+                try
+                {
+                    SqlConnection cnn = new SqlConnection(ConString);
+                    SqlCommand sc1;
+                    cnn.Open();
+                    sc1 = new SqlCommand(amountInAlready, cnn);
+                    amountIds = (int)sc1.ExecuteScalar();
+                    amountIds++;
+                    cnn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+                String insertMeetingsPart1 = "Insert into " + MeetingsDatabaseName + " (MeetingName, MeetingDate ,MeetingOwner,AmountInMeeting,MaxPossiableUsers,IsTheMeetingPublic,";
+                String insertMeetingsPart2 = "";
+                String user = "UsersInMeeting";
+                String insertMeetingsPart3 = "";
+                String time = "TimeOfMeetings";
+                int a = 0;
+                String dateOfMeeting = "'" + day + "/" + month + "/" + year;
+                for (int i = 0; i < UsersCheckedListBox.Items.Count; i++)
+                {
+                    a = i + 1;
+                    insertMeetingsPart2 += "" + user + a;
+                    insertMeetingsPart2 += ",";
+                }
+                a = 0;
+                for (int i = 0; i < TimesCheckedListBox.Items.Count; i++)
+                {
+                    a = i + 1;
+                    insertMeetingsPart3 += "" + time + a;
+                    if (a != TimesCheckedListBox.Items.Count)
+                        insertMeetingsPart3 += ",";
+                }
+                String insertMeetingsPart4 = ") values ('" + MeetingsDatabaseName + "'," + dateOfMeeting + "','" + init1.GetFullName() + "', '" + AmountOfUsersChecked + "', '" + AmountOfUsersPossiable + "', '" + database1.GetPublic() + "', '";
+                string InsertPartUsersFix = "";
+                string InsertPartTimesFix = "";
+                int b = 0;
+                List<string> ListOfCheckedItems = new List<string>();
+                List<string> ListOfPossiableCheckedItems = new List<string>();
+                foreach (object ItemChecked in UsersCheckedListBox.CheckedItems)
+                {
+                    ListOfCheckedItems.Add(ItemChecked.ToString());
+                }
+                foreach (object Item in UsersCheckedListBox.Items)
+                {
+                    ListOfPossiableCheckedItems.Add(Item.ToString());
+                }
+                foreach (string Item in ListOfPossiableCheckedItems)
+                {
+
+                    if (ListOfCheckedItems.Contains(Item.ToString()))
+                    {
+                        InsertPartUsersFix += Item.ToString();
+                        InsertPartUsersFix += "', '";
+                    }
+                    else
+                    {
+                        InsertPartUsersFix += "', '";
+                    }
+
+                }
+                ListOfCheckedItems.Clear();
+                ListOfPossiableCheckedItems.Clear();
+                List<string> ListOfCheckedItemsTimes = new List<string>();
+                List<string> ListOfPossiableCheckedItemsTimes = new List<string>();
+                foreach (object ItemChecked in TimesCheckedListBox.CheckedItems)
+                {
+                    ListOfCheckedItemsTimes.Add(ItemChecked.ToString());
+                }
+                foreach (object Item in TimesCheckedListBox.Items)
+                {
+                    ListOfPossiableCheckedItemsTimes.Add(Item.ToString());
+                }
+                int TimesListAmount = TimesCheckedListBox.Items.Count;
+                int counter = 0;
+                int counterPlus = 0;
+                foreach (string Item in ListOfPossiableCheckedItemsTimes)
+                {
+                    counter++;
+                    counterPlus = counter;
+                    if (ListOfCheckedItemsTimes.Contains(Item.ToString()))
+                    {
+                        InsertPartTimesFix += Item.ToString();
+                        if ((counterPlus + 1) <= TimesListAmount)
+                            InsertPartTimesFix += "', '";
+                    }
+                    else
+                    {
+                        InsertPartTimesFix += "";
+                        if (b != (TimesListAmount) - counter)
+                            InsertPartTimesFix += "', '";
+                        else
+                            MessageBox.Show(InsertPartTimesFix);
+
+                    }
+
+                }
+                ListOfCheckedItemsTimes.Clear();
+                ListOfPossiableCheckedItemsTimes.Clear();
+                //MessageBox.Show(insertMeetingsPart8);
+                String insertUsersFull = insertMeetingsPart1 + insertMeetingsPart2 + insertMeetingsPart3 + insertMeetingsPart4 + InsertPartUsersFix + InsertPartTimesFix + "')";
+                MessageBox.Show(insertUsersFull);
+                try
+                {
+                    SqlConnection cnn = new SqlConnection(ConString);
+                    SqlCommand oCmd = new SqlCommand(insertUsersFull, cnn);
+                    cnn.Open();
+                    oCmd.ExecuteNonQuery();
+                    oCmd.Dispose();
+                    cnn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+                //later have so anyone can be MeetingOwner using buttons
+                TimesCheckedListBox.ClearSelected();
+                UsersCheckedListBox.ClearSelected();
+                foreach (int i in TimesCheckedListBox.CheckedIndices)
+                {
+                    TimesCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
+                }
+                foreach (int i in UsersCheckedListBox.CheckedIndices)
+                {
+                    UsersCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
+                }
             }
-            foreach (int i in UsersCheckedListBox.CheckedIndices)
+            else
             {
-                UsersCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
+                MessageBox.Show("There is already a meeting time set");
             }
+            
         }
 
         private void NewUserBtn_Click(object sender, EventArgs e)
@@ -255,17 +296,10 @@ namespace Meetings
             {
                 MessageBox.Show(ex.ToString());
             }
-            String amountIdsString = "Select Count(*) from MeetingsDatabase";
-            SqlCommand sc1;
-            cnn.Open();
-            sc1 = new SqlCommand(amountIdsString, cnn);
-            int amountIds = (int)sc1.ExecuteScalar();
-            amountIds++;
-            cnn.Close();
             if (itContains == false)
             {
                 SqlCommand sc;
-                String insertUser = "Insert into MeetingsDatabase (ID,Username,FirstName,Surname,Password,Email) values ('"+amountIds+ "','"+Username+"','"+ Firstname+ "','"+LastName+ "','"+Password+"','b6018405@my.shu.ac.uk')";
+                String insertUser = "Insert into MeetingsDatabase (Username,FirstName,Surname,Password,Email) values ('"+Username+"','"+ Firstname+ "','"+LastName+ "','"+Password+"','b6018405@my.shu.ac.uk')";
                 try
                 {
                     cnn.Open();
@@ -367,7 +401,7 @@ namespace Meetings
                         MessageBox.Show("Meeting called " + meetingsName+ " is being set");
                         try
                         {
-                            String insertMeetingsPart1 = "CREATE TABLE[dbo].["+ meetingsName + "] (MeetingName varchar(20), MeetingDate varchar(20), MeetingOwner varchar(20), AmountInMeeting INT,";
+                            String insertMeetingsPart1 = "CREATE TABLE[dbo].["+ meetingsName + "] ("+ meetingsName + "ID int IDENTITY(1,1) PRIMARY KEY, MeetingName varchar(20), MeetingDate varchar(20), MeetingOwner varchar(20), AmountInMeeting INT,MaxPossiableUsers int, IsTheMeetingPublic varchar(20),";
                             String insertMeetingsPart2 = "";
                             String user = "UsersInMeeting";
                             String insertMeetingsPart3 = "";
@@ -392,6 +426,7 @@ namespace Meetings
                                     insertMeetingsPart3 += "); ";
                             }
                             String insertMeetingsFull = insertMeetingsPart1 + insertMeetingsPart2 + insertMeetingsPart3 ;
+                            MessageBox.Show(insertMeetingsFull);
                             using (SqlCommand command = new SqlCommand(insertMeetingsFull, con))
                                 command.ExecuteNonQuery();
                             MessageBox.Show("Hi");
@@ -483,6 +518,7 @@ namespace Meetings
             AddUsersToUsersCheckedList();
             TimesCheckedListBox.Items.Clear();
             TimesCheckedListBox.Items.AddRange(meetingTimes);
+            database1.SetPublic("true");
         }
 
         private void PrivateBtn_Click(object sender, EventArgs e)
@@ -492,11 +528,12 @@ namespace Meetings
             AddUsersToUsersCheckedList();
             TimesCheckedListBox.Items.Clear();
             TimesCheckedListBox.Items.AddRange(meetingTimes);
+            database1.SetPublic("false");
         }
         
         private void AddUsersToUsersCheckedList()
         {
-            string oString = "Select * from MeetingsDatabase where ID > 0";
+            string oString = "Select * from MeetingsDatabase where UserID > 0";
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             string firstName = "";
             string lastName = "";
@@ -536,11 +573,12 @@ namespace Meetings
         {
             UsersCheckedListBoxUpdate.Items.Clear();
             List<string> usersInThatMeeting = new List<string>();
+            List<string> usersDistiant = new List<string>();
             //TODO: TURNS ON REMOVE USERS
-            if(CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
+            if (CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
             {
                 
-                AllYourMeetingsUsersList(usersInThatMeeting);
+                AllYourMeetingsUsersList(usersInThatMeeting, usersDistiant);
                 foreach (string b in usersInThatMeeting)
                 {
                     MessageBox.Show(b);
@@ -558,7 +596,7 @@ namespace Meetings
                 CheckedListBoxMeetingsList.SetItemCheckState(i, CheckState.Unchecked);
             }
 
-            foreach (String user in usersInThatMeeting)
+            foreach (String user in usersDistiant)
             {
                 //if(user != init1.GetFullName())
                 //    UsersCheckedListBox.Items.Add(user);
@@ -569,7 +607,7 @@ namespace Meetings
 
         }
 
-        private void AllYourMeetingsUsersList(List<string> usersInThatMeeting)
+        private void AllYourMeetingsUsersList(List<string> usersInThatMeeting, List<string> usersDistiant)
         {
             String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             List<string> namesMeetingDatabase = new List<string>();
@@ -599,11 +637,11 @@ namespace Meetings
                         {
                             a = 1;
                             b = 1;
-                            intAmountInMeeting = oReader.GetInt32(3);
+                            intAmountInMeeting = oReader.GetInt32(4);
                             
                             while (a <= (intAmountInMeeting))
                             {
-                                personName = oReader.GetString((b + 3));
+                                personName = oReader.GetString((b + 6));
                                 if ((usersInThatMeeting.Contains(personName) && (personName == ""))||(personName == ""))
                                 {
                                     b++;
@@ -615,6 +653,8 @@ namespace Meetings
                                     b++;
                                 }
                             }
+                            usersDistiant.AddRange(usersInThatMeeting.Distinct().ToList());
+                            
                         }
                         cnn.Close();
                     }
@@ -624,11 +664,7 @@ namespace Meetings
                     MessageBox.Show(ex.ToString());
                 }
             }
-            foreach (string users in usersInThatMeeting)
-            {
-                MessageBox.Show(users);
-            }
-            MessageBox.Show(usersInThatMeeting.Count.ToString());
+            
         }
         private void MeetingsListBtn_Click(object sender, EventArgs e)
         {//TODO: change the cancel button to off then turn it on when do its todo
@@ -695,6 +731,7 @@ namespace Meetings
             //TODO: CHANGES DATE AND TIME
             if (CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
             {
+                meetingTimesListBox.Items.Clear();
                 List<string> nameOfMeetings = new List<string>();
                 List<string> datesOfMeetings = new List<string>();
                 foreach (object item in CheckedListBoxMeetingsList.CheckedItems)
@@ -727,7 +764,7 @@ namespace Meetings
                         String dateOfMeetings = "";
                         while (oReader.Read())
                         {
-                            dateOfMeetings = oReader.GetString(1);
+                            dateOfMeetings = oReader.GetString(2);
                             datesOfMeetings.Add(dateOfMeetings);
                         }
                         cnn.Close();
@@ -769,7 +806,7 @@ namespace Meetings
                 {
                     while (oReader.Read())
                     {
-                        intAmountInMeeting = oReader.GetInt32(3);
+                        intAmountInMeeting = oReader.GetInt32(4);
                         if (intAmountInMeeting > amountIn)
                             amountIn = intAmountInMeeting;
                         intAmountInMeetingList.Add(intAmountInMeeting);
@@ -777,6 +814,7 @@ namespace Meetings
                     cnn.Close();
                 }
                 string command2 = "UPDATE " + database1.GetRemoveMeetingName() + " SET " + SetRemoveSetUpdate(usersRemoveMeeting, amountIn) +", AmountInMeeting ="+ (intAmountInMeeting- UsersCheckedListBoxUpdate.CheckedItems.Count) + " WHERE MeetingOwner = '" + init1.GetFullName() + "';";
+                MessageBox.Show(command2);
                 cnn.Open();
                 using (SqlCommand com2 = new SqlCommand(command2, cnn))
                     com2.ExecuteNonQuery();
@@ -797,6 +835,52 @@ namespace Meetings
 
         private void UpdateTimesAndDataBtn_Click(object sender, EventArgs e)
         {
+            List<string> timesOfMeetingChange = new List<string>();
+            foreach(object item in TimesCheckedListBoxUpdate.CheckedItems)
+            {
+                timesOfMeetingChange.Add(item.ToString());
+            }
+            int day = dateTimePickerUpdate.Value.Day;
+            int month = dateTimePickerUpdate.Value.Month;
+            int year = dateTimePickerUpdate.Value.Year;
+            int maxAmoutOfHours = 0 ;
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            string publicOrNot = "";
+            SqlConnection cnn = new SqlConnection(ConString);
+            try
+            {
+                string command = "Select * from " + database1.GetUpdateMeetingName(0) + ";";
+
+                SqlCommand oCmd = new SqlCommand(command, cnn);
+                cnn.Open();
+                using (SqlDataReader oReader = oCmd.ExecuteReader())
+                {
+
+                    while (oReader.Read())
+                    {
+                        publicOrNot = oReader.GetString(6);
+                        database1.SetPublic(publicOrNot);
+                    }
+
+                }
+
+                cnn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            if (database1.GetPublic() == "true")
+            {
+                maxAmoutOfHours = 10;
+            }
+            else
+            {
+                maxAmoutOfHours = 14;
+            }
+            
+            UpdateMeetingTimesAndDate(timesOfMeetingChange, day, month, year, maxAmoutOfHours);
             //TODO: CHANGE TIME OF MEETING
             database1.ClearUpdateMeetingDate();
             database1.ClearUpdateMeetingName();
@@ -822,10 +906,10 @@ namespace Meetings
                 using (SqlDataReader oReader = oCmd.ExecuteReader())
                 {
                     int aba = 0;
-                    int stringNamesStart = 4;
+                    int stringNamesStart = 7;
                     while (oReader.Read())
                     {
-                        intAmountInMeeting = oReader.GetInt32(3);
+                        intAmountInMeeting = oReader.GetInt32(4);
                         while(aba < intAmountInMeeting)
                         {
                             allUsersNames= oReader.GetString(stringNamesStart);
@@ -925,11 +1009,179 @@ namespace Meetings
             {
                 database1.AddUpdateMeetingDate(item.ToString());
             }
+            MeetingTimesListUpdateBtn.Enabled = false;
+            List<string> meetingTimes = new List<string>();
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            string publicOrNot = "";
+            SqlConnection cnn = new SqlConnection(ConString);
+            try
+            {
+                string command = "Select * from " + database1.GetUpdateMeetingName(0) + ";";
+
+                SqlCommand oCmd = new SqlCommand(command, cnn);
+                cnn.Open();
+                using (SqlDataReader oReader = oCmd.ExecuteReader())
+                {
+
+                    while (oReader.Read())
+                    {
+                        publicOrNot = oReader.GetString(6);
+                        database1.SetPublic(publicOrNot);
+                    }
+
+                }
+
+                cnn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            if (database1.GetPublic() == "true")
+            {
+                string[] meetingTimes1 = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00" };
+                meetingTimes.AddRange(meetingTimes1);
+            }
+            else
+            {
+                string[] meetingTimes1 = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00" };
+                meetingTimes.AddRange(meetingTimes1);
+            }
+            foreach(string a in meetingTimes)
+            {
+                TimesCheckedListBoxUpdate.Items.Add(a);
+            }
+
+            //TODO: Add if the meeting is public or private to the database then more the numbers 1 over
         }
 
         private void ViewUsersPrefAndExclBtn_Click(object sender, EventArgs e)
         {
             //TODO: Reads users exclusion and prefence i wrote it up in facebook messager
+        }
+
+        public void UpdateMeetingTimesAndDate(List<string> timesOfMeetingChange, int day, int month, int year, int maxAmoutOfHours)
+        {
+            int b = 0;
+            int location = b;
+            foreach (string a in timesOfMeetingChange)
+            {
+                string name = database1.GetUpdateMeetingName(b);
+                string date = database1.GetUpdateMeetingDate(b);
+                location++;
+                String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+                string com = "Update " + name + " set MeetingDate = '" + day + "/" + month + "/" + year + "' ;";
+                string com2 = "Update " + name + " set " + SetTimesForDatabase(maxAmoutOfHours, timesOfMeetingChange, b) + " where "+name+"id = "+ location + ";";
+                MessageBox.Show(com2);
+                SqlConnection cnn = new SqlConnection(ConString);
+                cnn.Open();
+                using (SqlCommand command = new SqlCommand(com, cnn))
+                    command.ExecuteNonQuery();
+                cnn.Close();
+                cnn.Open();
+                using (SqlCommand command2 = new SqlCommand(com2, cnn))
+                    command2.ExecuteNonQuery();
+                cnn.Close();
+                b++;
+            }
+
+        }
+        private string SetTimesForDatabase(int maxAmoutOfHours, List<string> timesOfMeetingChange, int b)
+        {
+            string name = database1.GetUpdateMeetingName(b);
+            List<string> dataAlreadyInMeeting = new List<string>();
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            string com = "Select * from " + name + ";";
+            //TODO: chnage it so it only does its row. read the idices that the users name is then set a as that number, This is basicly the same for time and date would just chnage the date to the new pick
+            SqlConnection cnn = new SqlConnection(ConString);
+            try
+            {
+                SqlCommand oCmd = new SqlCommand(com, cnn);
+                cnn.Open();
+                using (SqlDataReader oReader = oCmd.ExecuteReader())
+                {
+                    int a = 0;
+                    int c = 0;
+                    string eitherBlankOrWillBeBlank = "";
+                    int startFrom = 0;
+                    while (oReader.Read())
+                    {
+                        startFrom = oReader.GetInt32(5);
+                        while (a < (maxAmoutOfHours))
+                        {
+                            eitherBlankOrWillBeBlank = oReader.GetString((c + 7 + startFrom));
+                            dataAlreadyInMeeting.Add(eitherBlankOrWillBeBlank);
+                            a++;
+                            c++;
+                        }
+                    }
+                    cnn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            string ba = "";
+            int ifMoreThan1user = 0;
+            int counter = 0;
+            int positionOfUser = 0;
+            List<string> TimesCheckedListList = new List<string>();
+            foreach (object item in TimesCheckedListBoxUpdate.Items)
+            {
+                TimesCheckedListList.Add(item.ToString());
+            }
+            foreach (string users in timesOfMeetingChange)
+            {
+                while (counter < maxAmoutOfHours)
+                {
+
+                    if (TimesCheckedListList.ElementAt(positionOfUser).Equals(users) && (timesOfMeetingChange.Count == 1))
+                    {
+                        int a = positionOfUser + 1;
+                        ++ifMoreThan1user;
+                        if (ifMoreThan1user == 1)
+                        {
+                            ba += "TimeOfMeetings" + a + "= '" + users + "'";
+                        }
+                        else
+                        {
+                            ba += ", TimeOfMeetings" + a + "= '" + users + "'";
+                        }
+                    }
+                    else if ((timesOfMeetingChange.Count > 1) && (TimesCheckedListList.ElementAt(positionOfUser).Equals(users)))
+                    {
+                        int a = positionOfUser + 1;
+                        ++ifMoreThan1user;
+                        if (ifMoreThan1user == 1)
+                        {
+                            ba += "TimeOfMeetings" + a + "= '" + users + "'";
+                        }
+                        else
+                        {
+                            ba += ", TimeOfMeetings" + a + "= '" + users + "'";
+                        }
+                    }
+                    else
+                    {
+                        int a = positionOfUser + 1;
+                        ++ifMoreThan1user;
+                        if (ifMoreThan1user == 1)
+                        {
+                            ba += "TimeOfMeetings" + a + "= ''";
+                        }
+                        else
+                        {
+                            ba += ", TimeOfMeetings" + a + "= ''";
+                        }
+                    }
+                    counter++;
+                    positionOfUser++;
+                }
+            }
+                MessageBox.Show(ba);
+            return ba;
         }
     }
 }
