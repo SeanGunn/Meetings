@@ -68,6 +68,9 @@
             this.CreateUserInitBtn = new System.Windows.Forms.Button();
             this.CreateUserRecipBtn = new System.Windows.Forms.Button();
             this.EditMeetingsBtn = new System.Windows.Forms.Button();
+            this.meetingTimesListBox = new System.Windows.Forms.CheckedListBox();
+            this.MeetingTimesListUpdateBtn = new System.Windows.Forms.Button();
+            this.ViewUsersPrefAndExclBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Loginbtn
@@ -307,7 +310,7 @@
             // TimesCheckedListBoxUpdate
             // 
             this.TimesCheckedListBoxUpdate.FormattingEnabled = true;
-            this.TimesCheckedListBoxUpdate.Location = new System.Drawing.Point(875, 289);
+            this.TimesCheckedListBoxUpdate.Location = new System.Drawing.Point(864, 481);
             this.TimesCheckedListBoxUpdate.Name = "TimesCheckedListBoxUpdate";
             this.TimesCheckedListBoxUpdate.Size = new System.Drawing.Size(120, 94);
             this.TimesCheckedListBoxUpdate.TabIndex = 29;
@@ -315,7 +318,7 @@
             // dateTimePickerUpdate
             // 
             this.dateTimePickerUpdate.CustomFormat = "ddd/ MMM / yyyy   |   HH:mm";
-            this.dateTimePickerUpdate.Location = new System.Drawing.Point(821, 263);
+            this.dateTimePickerUpdate.Location = new System.Drawing.Point(820, 455);
             this.dateTimePickerUpdate.Name = "dateTimePickerUpdate";
             this.dateTimePickerUpdate.Size = new System.Drawing.Size(200, 20);
             this.dateTimePickerUpdate.TabIndex = 30;
@@ -369,7 +372,7 @@
             // 
             // UpdateTimesAndDataBtn
             // 
-            this.UpdateTimesAndDataBtn.Location = new System.Drawing.Point(883, 396);
+            this.UpdateTimesAndDataBtn.Location = new System.Drawing.Point(872, 600);
             this.UpdateTimesAndDataBtn.Name = "UpdateTimesAndDataBtn";
             this.UpdateTimesAndDataBtn.Size = new System.Drawing.Size(112, 39);
             this.UpdateTimesAndDataBtn.TabIndex = 38;
@@ -379,7 +382,7 @@
             // 
             // RemoveSelfMeetingBtn
             // 
-            this.RemoveSelfMeetingBtn.Location = new System.Drawing.Point(728, 523);
+            this.RemoveSelfMeetingBtn.Location = new System.Drawing.Point(695, 663);
             this.RemoveSelfMeetingBtn.Name = "RemoveSelfMeetingBtn";
             this.RemoveSelfMeetingBtn.Size = new System.Drawing.Size(137, 52);
             this.RemoveSelfMeetingBtn.TabIndex = 39;
@@ -389,7 +392,7 @@
             // 
             // PefenAndExclTimesBtn
             // 
-            this.PefenAndExclTimesBtn.Location = new System.Drawing.Point(997, 523);
+            this.PefenAndExclTimesBtn.Location = new System.Drawing.Point(1037, 663);
             this.PefenAndExclTimesBtn.Name = "PefenAndExclTimesBtn";
             this.PefenAndExclTimesBtn.Size = new System.Drawing.Size(129, 52);
             this.PefenAndExclTimesBtn.TabIndex = 40;
@@ -427,12 +430,43 @@
             this.EditMeetingsBtn.UseVisualStyleBackColor = true;
             this.EditMeetingsBtn.Click += new System.EventHandler(this.EditMeetingsBtn_Click);
             // 
+            // meetingTimesListBox
+            // 
+            this.meetingTimesListBox.FormattingEnabled = true;
+            this.meetingTimesListBox.Location = new System.Drawing.Point(864, 274);
+            this.meetingTimesListBox.Name = "meetingTimesListBox";
+            this.meetingTimesListBox.Size = new System.Drawing.Size(120, 94);
+            this.meetingTimesListBox.TabIndex = 44;
+            // 
+            // MeetingTimesListUpdateBtn
+            // 
+            this.MeetingTimesListUpdateBtn.Location = new System.Drawing.Point(875, 385);
+            this.MeetingTimesListUpdateBtn.Name = "MeetingTimesListUpdateBtn";
+            this.MeetingTimesListUpdateBtn.Size = new System.Drawing.Size(109, 61);
+            this.MeetingTimesListUpdateBtn.TabIndex = 45;
+            this.MeetingTimesListUpdateBtn.Text = "Pick the meetings you want to change";
+            this.MeetingTimesListUpdateBtn.UseVisualStyleBackColor = true;
+            this.MeetingTimesListUpdateBtn.Click += new System.EventHandler(this.MeetingTimesListUpdateBtn_Click);
+            // 
+            // ViewUsersPrefAndExclBtn
+            // 
+            this.ViewUsersPrefAndExclBtn.Location = new System.Drawing.Point(1086, 289);
+            this.ViewUsersPrefAndExclBtn.Name = "ViewUsersPrefAndExclBtn";
+            this.ViewUsersPrefAndExclBtn.Size = new System.Drawing.Size(116, 76);
+            this.ViewUsersPrefAndExclBtn.TabIndex = 46;
+            this.ViewUsersPrefAndExclBtn.Text = "View all the preference and excusions of users in the meeting";
+            this.ViewUsersPrefAndExclBtn.UseVisualStyleBackColor = true;
+            this.ViewUsersPrefAndExclBtn.Click += new System.EventHandler(this.ViewUsersPrefAndExclBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ClientSize = new System.Drawing.Size(1234, 802);
+            this.Controls.Add(this.ViewUsersPrefAndExclBtn);
+            this.Controls.Add(this.MeetingTimesListUpdateBtn);
+            this.Controls.Add(this.meetingTimesListBox);
             this.Controls.Add(this.EditMeetingsBtn);
             this.Controls.Add(this.CreateUserRecipBtn);
             this.Controls.Add(this.CreateUserInitBtn);
@@ -522,6 +556,9 @@
         private System.Windows.Forms.Button CreateUserInitBtn;
         private System.Windows.Forms.Button CreateUserRecipBtn;
         private System.Windows.Forms.Button EditMeetingsBtn;
+        private System.Windows.Forms.CheckedListBox meetingTimesListBox;
+        private System.Windows.Forms.Button MeetingTimesListUpdateBtn;
+        private System.Windows.Forms.Button ViewUsersPrefAndExclBtn;
     }
 }
 

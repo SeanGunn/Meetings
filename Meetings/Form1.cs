@@ -695,22 +695,52 @@ namespace Meetings
             //TODO: CHANGES DATE AND TIME
             if (CheckedListBoxMeetingsList.CheckedItems.Count <= 1)
             {
-                List<string> usersInThatMeeting = new List<string>();
-                AllYourMeetingsUsersList(usersInThatMeeting);
-                foreach (string b in usersInThatMeeting)
+                List<string> nameOfMeetings = new List<string>();
+                List<string> datesOfMeetings = new List<string>();
+                foreach (object item in CheckedListBoxMeetingsList.CheckedItems)
                 {
-                    MessageBox.Show(b);
+                    nameOfMeetings.Add(item.ToString());
+                    database1.AddUpdateMeetingName(item.ToString());
                 }
-                MessageBox.Show(usersInThatMeeting.Count.ToString());
-                UsersInMeetingTransferBtn.Enabled = true;
-                UpdateDateTimeBtn.Enabled = true;
+                AllYourMeetingsDateList(nameOfMeetings, datesOfMeetings);
+                
             }
             else
                 MessageBox.Show("Only one at a time please");
-            CheckedListBoxMeetingsList.ClearSelected();
-            foreach (int i in CheckedListBoxMeetingsList.CheckedIndices)
+            
+        }
+
+        private void AllYourMeetingsDateList(List<string> nameOfMeetings, List<string> datesOfMeetings)
+        {
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            foreach (String nameOfMeeting in nameOfMeetings)
             {
-                CheckedListBoxMeetingsList.SetItemCheckState(i, CheckState.Unchecked);
+                String command = "Select * from " + nameOfMeeting + ";";
+                database1.SetRemoveMeetingName(nameOfMeeting);
+                SqlConnection cnn = new SqlConnection(ConString);
+                try
+                {
+                    SqlCommand oCmd = new SqlCommand(command, cnn);
+                    cnn.Open();
+                    using (SqlDataReader oReader = oCmd.ExecuteReader())
+                    {
+                        String dateOfMeetings = "";
+                        while (oReader.Read())
+                        {
+                            dateOfMeetings = oReader.GetString(1);
+                            datesOfMeetings.Add(dateOfMeetings);
+                        }
+                        cnn.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
+            foreach(string a in datesOfMeetings)
+            {
+                meetingTimesListBox.Items.Add(a);
             }
         }
 
@@ -768,6 +798,8 @@ namespace Meetings
         private void UpdateTimesAndDataBtn_Click(object sender, EventArgs e)
         {
             //TODO: CHANGE TIME OF MEETING
+            database1.ClearUpdateMeetingDate();
+            database1.ClearUpdateMeetingName();
         }
 
         private void RemoveSelfMeetingBtn_Click(object sender, EventArgs e)
@@ -864,7 +896,7 @@ namespace Meetings
 
         private void PefenAndExclTimesBtn_Click(object sender, EventArgs e)
         {
-
+            //TODO: read facebook messager since i wrote the answer their
         }
 
         private void CreateUserInitBtn_Click(object sender, EventArgs e)
@@ -885,6 +917,19 @@ namespace Meetings
         private void EditMeetingsBtn_Click(object sender, EventArgs e)
         {
             //TODO: SHOWS ONLY EDIT MEMU
+        }
+
+        private void MeetingTimesListUpdateBtn_Click(object sender, EventArgs e)
+        {
+            foreach(object item in meetingTimesListBox.CheckedItems)
+            {
+                database1.AddUpdateMeetingDate(item.ToString());
+            }
+        }
+
+        private void ViewUsersPrefAndExclBtn_Click(object sender, EventArgs e)
+        {
+            //TODO: Reads users exclusion and prefence i wrote it up in facebook messager
         }
     }
 }
