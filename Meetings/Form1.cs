@@ -225,6 +225,34 @@ namespace Meetings
                 {
                     MessageBox.Show(ex.ToString());
                 }
+                string usersInMeetingGlobalTable = "' ";
+                int g = 0;
+                foreach(object item in UsersCheckedListBox.CheckedItems)
+                {
+                    g++;
+                    usersInMeetingGlobalTable += " "+item.ToString();
+                    if(g != UsersCheckedListBox.CheckedItems.Count)
+                    {
+                        usersInMeetingGlobalTable += " / ";
+                    }
+                }
+                usersInMeetingGlobalTable += "'";
+                string GlobalTableList = "GlobalTableList";
+                String addingUsersToMeeting = "Update "+ GlobalTableList + " Set Users = "+ usersInMeetingGlobalTable + "where  MeetingName = '"+MeetingsDatabaseName+"';";
+                MessageBox.Show(addingUsersToMeeting);
+                try
+                {
+                    SqlConnection cnn = new SqlConnection(ConString);
+                    SqlCommand oCmd = new SqlCommand(addingUsersToMeeting, cnn);
+                    cnn.Open();
+                    oCmd.ExecuteNonQuery();
+                    oCmd.Dispose();
+                    cnn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
                 //later have so anyone can be MeetingOwner using buttons
                 TimesCheckedListBox.ClearSelected();
                 UsersCheckedListBox.ClearSelected();
@@ -447,6 +475,38 @@ namespace Meetings
                 {
                     MessageBox.Show(ex.Message);
                 }
+                string createPrefAndExcDatabase = "CREATE TABLE[dbo].[" + meetingsName + "UsersAnswers] (ID int IDENTITY(1,1) PRIMARY KEY, MeetingAnswersUser varchar(20), MeetingAnswersDate varchar(20), MeetingAnswersPrefForDate varchar(200), MeetingAnswersExcForDate varchar(200) );";
+                MessageBox.Show(createPrefAndExcDatabase);
+                try
+                {
+                    SqlConnection cnn = new SqlConnection(ConString);
+                    SqlCommand oCmd = new SqlCommand(createPrefAndExcDatabase, cnn);
+                    cnn.Open();
+                    oCmd.ExecuteNonQuery();
+                    oCmd.Dispose();
+                    cnn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+                string GlobalTableList = "GlobalTableList";
+                string PerfAndExMeetingName = meetingsName + "UsersAnswers";
+                String AddingPrefExclMeetingToGlobalList = "Update " + GlobalTableList + " Set  MeetingPrefAndExDatabaseName = '"+PerfAndExMeetingName+ "' where MeetingName = '" + meetingsName + "';";
+                MessageBox.Show(AddingPrefExclMeetingToGlobalList);
+                try
+                {
+                    SqlConnection cnn = new SqlConnection(ConString);
+                    SqlCommand oCmd = new SqlCommand(AddingPrefExclMeetingToGlobalList, cnn);
+                    cnn.Open();
+                    oCmd.ExecuteNonQuery();
+                    oCmd.Dispose();
+                    cnn.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
             }
            
         }
@@ -476,7 +536,8 @@ namespace Meetings
                         }
                         using(SqlCommand com2 = new SqlCommand(command2, con))
                             com2.ExecuteNonQuery();
-
+                        using (SqlCommand command3 = new SqlCommand("DROP TABLE[dbo].[" + meetingsName + "UsersAnswers];", con))
+                            command3.ExecuteNonQuery();
                     }
                     else
                     {
@@ -994,6 +1055,8 @@ namespace Meetings
         {
             //TODO: SHOWS ONLY MEETINGS IN MEMU
             recip1 = new Recip(user1.GetUsername(), user1.GetFName(), user1.GetLName(), user1.GetPassword(), user1.GetEmail());
+            MessageBox.Show(recip1.GetFName());
+            MeetingListView();
             //TODO: make sure meeting list works with recip
             //MeetingList();
         }
@@ -1183,5 +1246,49 @@ namespace Meetings
                 MessageBox.Show(ba);
             return ba;
         }
+        private void MeetingListView()
+        {
+            MessageBox.Show("Entered");
+            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+            string com = "Select * from GlobalTableList;";
+            List<string> namesListInDatabase = new List<string>();
+            SqlConnection cnn = new SqlConnection(ConString);
+            try
+            {
+                string userFN = recip1.GetFName();
+                string userLN = recip1.GetLName();
+                string meetingUsers = "";
+                string meetingName = "";
+                SqlCommand oCmd = new SqlCommand(com, cnn);
+                cnn.Open();
+                using (SqlDataReader oReader = oCmd.ExecuteReader())
+                {
+                    while (oReader.Read())
+                    {
+                        meetingUsers = oReader["Users"].ToString();
+                        MessageBox.Show(meetingUsers);
+                        MessageBox.Show(userFN);
+                        if (meetingUsers.Contains(userFN) && meetingUsers.Contains(userLN))
+                        {
+                            MessageBox.Show("entered again");
+                            meetingName = oReader["MeetingName"].ToString();
+                            namesListInDatabase.Add(meetingName);
+                        }
+                    }
+                cnn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            CheckedListBoxMeetingsList.Items.Clear();
+            //TODO: When rearraging i need have it not show current user
+            foreach (String meeting in namesListInDatabase)
+            {   
+                CheckedListBoxMeetingsList.Items.Add(meeting);
+            }
+        }
     }
+    
 }
