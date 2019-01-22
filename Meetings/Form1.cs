@@ -1058,6 +1058,7 @@ namespace Meetings
                 int counter = 0;
                 int scalar = 0;
                 int areaWeAreLooking = 0;
+                string date = "";
                 string times = "";
                 string publicOrNot = "";
                 int maxAmoutOfHours = 0;
@@ -1093,6 +1094,9 @@ namespace Meetings
                             areaWeAreLooking = 6;
                             intAmountInMeeting = intAmountInMeeting + areaWeAreLooking;
                             scalar = intAmountInMeeting;
+                            date = oReader.GetString(2);
+                            database1.SetVaidateMeetingDate(date);
+                            //Would be a list if did more than 1 but not trusting you Ziad with that
                             while (counter < maxAmoutOfHours)
                             {
                                 ++counter;
@@ -1377,8 +1381,32 @@ namespace Meetings
 
         private void PrefExclVaidateBtn_Click(object sender, EventArgs e)
         {
-            //TODO: ZIAD Vaidate then insert into meetingName
-            string meetingName = database1.GetVaidateMeetingName() + "UsersAnswers";
+            if((PrefCheckedListBox.CheckedItems.Count < 1)||(ExCheckedListBox.CheckedItems.Count < 1))
+            {
+                //TODO: ZIAD Vaidate then insert into meetingName
+                string meetingName = database1.GetVaidateMeetingName() + "UsersAnswers";
+                string date = database1.GetVaidateMeetingDate();
+                string pref = "";
+                string excl = "";
+                List<string> PrefList = new List<string>();
+                List<string> ExclList = new List<string>();
+                foreach (object item in PrefCheckedListBox.CheckedItems)
+                {
+                    pref = item.ToString();
+                    PrefList.Add(pref);
+                }
+                foreach (object item in ExCheckedListBox.CheckedItems)
+                {
+                    excl = item.ToString();
+                    ExclList.Add(excl);
+                }
+                //They are added to the list you have to compare their ideces make a array with ExclList.toarray() if you find it easier.
+            }
+            else
+            {//TODO: ADD THE WORD CAN'T SPELL FOR MY LIFE
+                MessageBox.Show("Enter at least one for both preference and ");
+            }
+            
         }
     }
     

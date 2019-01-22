@@ -17,6 +17,7 @@ namespace Meetings
         private List<string> UpdateMeetingName = new List<string>();
         string a = "";
         private string VaidateMeetingName;
+        private string VaidateMeetingDate;
         public Database(string Name)
         {
             this.Name = Name;
@@ -83,6 +84,15 @@ namespace Meetings
         public string GetVaidateMeetingName()
         {
             return this.VaidateMeetingName;
+        }
+        public void SetVaidateMeetingDate(string value)
+        {
+            this.VaidateMeetingDate = value;
+        }
+
+        public string GetVaidateMeetingDate()
+        {
+            return this.VaidateMeetingDate;
         }
         //public string GetUPMN(int value)
         //{
