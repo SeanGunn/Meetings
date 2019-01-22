@@ -45,7 +45,7 @@ namespace Meetings
             CheckedListBoxMeetingsList.CheckOnClick = true;
             AddUsersToUsersCheckedList();
             string[] meetingTimes = { "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00","17:00","18:00","19:00","20:00","21:00"};
-            init1 = new Init("","Mehmet", "Ozcan", "","");
+            init1 = new Init("","", "", "","");
             recip1 = new Recip("", "", "", "", "");
             TimesCheckedListBox.Items.AddRange(meetingTimes);
         }
@@ -1041,7 +1041,85 @@ namespace Meetings
 
         private void PefenAndExclTimesBtn_Click(object sender, EventArgs e)
         {
+            List<string> ListOfTimes = new List<string>();
+            List<string> TimesDistiant = new List<string>();
+            List<string> TimesRemovedNoString = new List<string>();
+            if (CheckedListBoxMeetingsList.CheckedItems.Count > 1)
+            {
+                MessageBox.Show("One at a time please.");
+            }
+            else if (CheckedListBoxMeetingsList.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("One at a time please.");
+            }
+            else
+            {
+                int intAmountInMeeting = 0;
+                int counter = 0;
+                int scalar = 0;
+                int areaWeAreLooking = 0;
+                string times = "";
+                string publicOrNot = "";
+                int maxAmoutOfHours = 0;
+                string checkedItemsForLooking = "";
+                foreach (object item in CheckedListBoxMeetingsList.CheckedItems)
+                {
+                    checkedItemsForLooking += item.ToString();
+                }
+                database1.SetVaidateMeetingName(checkedItemsForLooking);
+                String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+                SqlConnection cnn = new SqlConnection(ConString);
+                try
+                {
+
+                    String command = "Select * from " + checkedItemsForLooking + ";";
+                    SqlCommand oCmd = new SqlCommand(command, cnn);
+                    cnn.Open();
+                    using (SqlDataReader oReader = oCmd.ExecuteReader())
+                    {
+                        while (oReader.Read())
+                        {
+                            publicOrNot = oReader.GetString(6);
+                            database1.SetPublic(publicOrNot);
+                            if (database1.GetPublic() == "true")
+                            {
+                                maxAmoutOfHours = 10;
+                            }
+                            else
+                            {
+                                maxAmoutOfHours = 14;
+                            }
+                            intAmountInMeeting = oReader.GetInt32(4);
+                            areaWeAreLooking = 6;
+                            intAmountInMeeting = intAmountInMeeting + areaWeAreLooking;
+                            scalar = intAmountInMeeting;
+                            while (counter < maxAmoutOfHours)
+                            {
+                                ++counter;
+                                ++scalar;
+                                times = oReader.GetString(scalar).ToString();
+                                ListOfTimes.Add(times);
+                            }
+                        }
+                        TimesDistiant.AddRange(ListOfTimes.Distinct());
+                        TimesDistiant.Remove("");
+                        //ListOfTimes.RemoveAll("");
+                        TimesRemovedNoString.AddRange(TimesDistiant.ToList());
+                        foreach(string a in TimesRemovedNoString)
+                        {
+                            PrefCheckedListBox.Items.Add(a);
+                            ExCheckedListBox.Items.Add(a);
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
             //TODO: read facebook messager since i wrote the answer their
+            
         }
 
         private void CreateUserInitBtn_Click(object sender, EventArgs e)
@@ -1288,6 +1366,19 @@ namespace Meetings
             {   
                 CheckedListBoxMeetingsList.Items.Add(meeting);
             }
+        }
+
+        private void Logoutbtn_Click(object sender, EventArgs e)
+        {
+            //TODO: Reset the checked box lists and move back to login page
+            init1 = new Init("", "", "", "", "");
+            recip1 = new Recip("", "", "", "", "");
+        }
+
+        private void PrefExclVaidateBtn_Click(object sender, EventArgs e)
+        {
+            //TODO: ZIAD Vaidate then insert into meetingName
+            string meetingName = database1.GetVaidateMeetingName() + "UsersAnswers";
         }
     }
     

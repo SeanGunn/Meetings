@@ -71,6 +71,10 @@
             this.meetingTimesListBox = new System.Windows.Forms.CheckedListBox();
             this.MeetingTimesListUpdateBtn = new System.Windows.Forms.Button();
             this.ViewUsersPrefAndExclBtn = new System.Windows.Forms.Button();
+            this.Logoutbtn = new System.Windows.Forms.Button();
+            this.PrefCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.ExCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.PrefExclVaidateBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Loginbtn
@@ -382,7 +386,7 @@
             // 
             // RemoveSelfMeetingBtn
             // 
-            this.RemoveSelfMeetingBtn.Location = new System.Drawing.Point(695, 663);
+            this.RemoveSelfMeetingBtn.Location = new System.Drawing.Point(852, 671);
             this.RemoveSelfMeetingBtn.Name = "RemoveSelfMeetingBtn";
             this.RemoveSelfMeetingBtn.Size = new System.Drawing.Size(137, 52);
             this.RemoveSelfMeetingBtn.TabIndex = 39;
@@ -392,7 +396,7 @@
             // 
             // PefenAndExclTimesBtn
             // 
-            this.PefenAndExclTimesBtn.Location = new System.Drawing.Point(1037, 663);
+            this.PefenAndExclTimesBtn.Location = new System.Drawing.Point(1183, 327);
             this.PefenAndExclTimesBtn.Name = "PefenAndExclTimesBtn";
             this.PefenAndExclTimesBtn.Size = new System.Drawing.Size(129, 52);
             this.PefenAndExclTimesBtn.TabIndex = 40;
@@ -450,7 +454,7 @@
             // 
             // ViewUsersPrefAndExclBtn
             // 
-            this.ViewUsersPrefAndExclBtn.Location = new System.Drawing.Point(1086, 289);
+            this.ViewUsersPrefAndExclBtn.Location = new System.Drawing.Point(1282, 211);
             this.ViewUsersPrefAndExclBtn.Name = "ViewUsersPrefAndExclBtn";
             this.ViewUsersPrefAndExclBtn.Size = new System.Drawing.Size(116, 76);
             this.ViewUsersPrefAndExclBtn.TabIndex = 46;
@@ -458,12 +462,52 @@
             this.ViewUsersPrefAndExclBtn.UseVisualStyleBackColor = true;
             this.ViewUsersPrefAndExclBtn.Click += new System.EventHandler(this.ViewUsersPrefAndExclBtn_Click);
             // 
+            // Logoutbtn
+            // 
+            this.Logoutbtn.Location = new System.Drawing.Point(1037, 27);
+            this.Logoutbtn.Name = "Logoutbtn";
+            this.Logoutbtn.Size = new System.Drawing.Size(165, 65);
+            this.Logoutbtn.TabIndex = 47;
+            this.Logoutbtn.Text = "Logout";
+            this.Logoutbtn.UseVisualStyleBackColor = true;
+            this.Logoutbtn.Click += new System.EventHandler(this.Logoutbtn_Click);
+            // 
+            // PrefCheckedListBox
+            // 
+            this.PrefCheckedListBox.FormattingEnabled = true;
+            this.PrefCheckedListBox.Location = new System.Drawing.Point(1097, 401);
+            this.PrefCheckedListBox.Name = "PrefCheckedListBox";
+            this.PrefCheckedListBox.Size = new System.Drawing.Size(120, 94);
+            this.PrefCheckedListBox.TabIndex = 48;
+            // 
+            // ExCheckedListBox
+            // 
+            this.ExCheckedListBox.FormattingEnabled = true;
+            this.ExCheckedListBox.Location = new System.Drawing.Point(1282, 399);
+            this.ExCheckedListBox.Name = "ExCheckedListBox";
+            this.ExCheckedListBox.Size = new System.Drawing.Size(120, 94);
+            this.ExCheckedListBox.TabIndex = 49;
+            // 
+            // PrefExclVaidateBtn
+            // 
+            this.PrefExclVaidateBtn.Location = new System.Drawing.Point(1192, 514);
+            this.PrefExclVaidateBtn.Name = "PrefExclVaidateBtn";
+            this.PrefExclVaidateBtn.Size = new System.Drawing.Size(120, 61);
+            this.PrefExclVaidateBtn.TabIndex = 50;
+            this.PrefExclVaidateBtn.Text = "Vaidate your meeting times";
+            this.PrefExclVaidateBtn.UseVisualStyleBackColor = true;
+            this.PrefExclVaidateBtn.Click += new System.EventHandler(this.PrefExclVaidateBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ClientSize = new System.Drawing.Size(1234, 802);
+            this.ClientSize = new System.Drawing.Size(1453, 802);
+            this.Controls.Add(this.PrefExclVaidateBtn);
+            this.Controls.Add(this.ExCheckedListBox);
+            this.Controls.Add(this.PrefCheckedListBox);
+            this.Controls.Add(this.Logoutbtn);
             this.Controls.Add(this.ViewUsersPrefAndExclBtn);
             this.Controls.Add(this.MeetingTimesListUpdateBtn);
             this.Controls.Add(this.meetingTimesListBox);
@@ -559,6 +603,10 @@
         private System.Windows.Forms.CheckedListBox meetingTimesListBox;
         private System.Windows.Forms.Button MeetingTimesListUpdateBtn;
         private System.Windows.Forms.Button ViewUsersPrefAndExclBtn;
+        private System.Windows.Forms.Button Logoutbtn;
+        private System.Windows.Forms.CheckedListBox PrefCheckedListBox;
+        private System.Windows.Forms.CheckedListBox ExCheckedListBox;
+        private System.Windows.Forms.Button PrefExclVaidateBtn;
     }
 }
 
