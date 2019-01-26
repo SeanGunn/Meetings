@@ -40,7 +40,6 @@ namespace Meetings
         public void SetFName(String value)
         {
             this.Fname = value;
-            MessageBox.Show(value);
         }
         public string GetFName()
         {

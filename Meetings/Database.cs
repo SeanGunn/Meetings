@@ -34,7 +34,7 @@ namespace Meetings
         public void SetName(String value)
         {
             this.Name = value;
-            MessageBox.Show(value);
+
         }
         public string GetName()
         {
@@ -43,7 +43,7 @@ namespace Meetings
         public void SetRemoveMeetingName(String value)
         {
             this.RemoveMeetingName = value;
-            MessageBox.Show(value);
+
         }
         public string GetRemoveMeetingName()
         {
@@ -94,10 +94,7 @@ namespace Meetings
         {
             return this.VaidateMeetingDate;
         }
-        //public string GetUPMN(int value)
-        //{
-        //     return this.a  = GetUpdateMeetingName(value).ToString();
-        //}
+
 
     }
 }
