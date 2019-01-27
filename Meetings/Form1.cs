@@ -19,6 +19,7 @@ namespace Meetings
         Init init1;
         Recip recip1;
         private Database database1;
+        String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
         public Form1()
         {
             InitializeComponent();
@@ -49,6 +50,41 @@ namespace Meetings
             init1 = new Init("","", "", "","");
             recip1 = new Recip("", "", "", "", "");
             TimesCheckedListBox.Items.AddRange(meetingTimes);
+            string cmdText = @"IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES 
+                       WHERE TABLE_NAME='GlobalTableList') SELECT 1 ELSE SELECT 0";
+            string cmdText2 = @"IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES 
+                       WHERE TABLE_NAME='MeetingsDatabase') SELECT 1 ELSE SELECT 0";
+            string command = "CREATE TABLE[dbo].[GlobalTableList] (GlobalTableID int IDENTITY(1,1) PRIMARY KEY,MeetingOwner varchar(20), MeetingName varchar(20), Users varchar(100), MeetingPrefAndExDatabaseName varchar(100));";
+            string command2 = "CREATE TABLE[dbo].[MeetingsDatabase] (UserID int IDENTITY(1,1) PRIMARY KEY,Username varchar(20), FirstName varchar(20), Surname varchar(20), Password varchar(20), Email varchar(20));";
+            using (SqlConnection con = new SqlConnection(ConString))
+            {
+
+                try
+                {
+                    con.Open();
+                    SqlCommand GlobalTableListCheck = new SqlCommand(cmdText, con);
+                    int x = Convert.ToInt32(GlobalTableListCheck.ExecuteScalar());
+                    if (x == 0)
+                    {
+                        using (SqlCommand com = new SqlCommand(command, con))
+                            com.ExecuteNonQuery();
+                    }
+                    con.Close();
+                    con.Open();
+                    SqlCommand MeetingsDatabaseCheck = new SqlCommand(cmdText2, con);
+                    int y = Convert.ToInt32(MeetingsDatabaseCheck.ExecuteScalar());
+                    if (y == 0)
+                    {
+                        using (SqlCommand com2 = new SqlCommand(command2, con))
+                            com2.ExecuteNonQuery();
+                    }
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
 
         private void Loginbtn_Click(object sender, EventArgs e)
@@ -62,7 +98,7 @@ namespace Meetings
 
         private void DatePickerbtn_Click(object sender, EventArgs e)
         {
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+
             string MeetingsDatabaseName = database1.GetName();
             Int32 count = 0;
             if (count <= 1)
@@ -335,7 +371,7 @@ namespace Meetings
             string password = "";
             string Email = "";
             string oString = "Select * from MeetingsDatabase where Username=@username";
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+
             SqlConnection cnn = new SqlConnection(ConString);
             try
             {
@@ -392,7 +428,6 @@ namespace Meetings
             string firstName = "";
             string lastName = "";
             string email = "";
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             using (SqlConnection cnn = new SqlConnection(ConString))
             {
                 string oString = "Select * from MeetingsDatabase where Username=@username";
@@ -484,7 +519,6 @@ namespace Meetings
         
         private void CreateMeetingsDatabase(string meetingsName)
         {
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             string cmdText = @"IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES 
                        WHERE TABLE_NAME='" + meetingsName + "') SELECT 1 ELSE SELECT 0";
             using (SqlConnection con = new SqlConnection(ConString))
@@ -599,7 +633,7 @@ namespace Meetings
         
         private void DropMeeting(string meetingsName)
         {
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
+
             string cmdText = @"IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES 
                        WHERE TABLE_NAME='" + meetingsName + "') SELECT 1 ELSE SELECT 0";
             string command2 = "Delete from GlobalTableList where MeetingName='" + meetingsName + "';";
@@ -701,7 +735,6 @@ namespace Meetings
         private void AddUsersToUsersCheckedList()
         {
             string oString = "Select * from MeetingsDatabase where UserID > 0";
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             string firstName = "";
             string lastName = "";
             string name = "";
@@ -779,7 +812,6 @@ namespace Meetings
 
         private void AllYourMeetingsUsersList(List<string> usersInThatMeeting, List<string> usersDistiant)
         {
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             List<string> namesMeetingDatabase = new List<string>();
             string meetingName = "";
             string personName = "";
@@ -839,7 +871,6 @@ namespace Meetings
 
         private void MeetingList()
         {
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             string com = "Select * from GlobalTableList;";
             List<string> namesListInDatabase = new List<string>();
             SqlConnection cnn = new SqlConnection(ConString);
@@ -908,7 +939,6 @@ namespace Meetings
 
         private void AllYourMeetingsDateList(List<string> nameOfMeetings, List<string> datesOfMeetings)
         {
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             foreach (String nameOfMeeting in nameOfMeetings)
             {
                 String command = "Select * from " + nameOfMeeting + ";";
@@ -950,8 +980,6 @@ namespace Meetings
             {
                 usersRemoveMeeting.Add(Item.ToString());
             }
-            
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             string com = "Update "+database1.GetRemoveMeetingName()+" set ;";
             
             SqlConnection cnn = new SqlConnection(ConString);
@@ -1067,7 +1095,6 @@ namespace Meetings
             int month = dateTimePickerUpdate.Value.Month;
             int year = dateTimePickerUpdate.Value.Year;
             int maxAmoutOfHours = 0 ;
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             string publicOrNot = "";
             SqlConnection cnn = new SqlConnection(ConString);
             try
@@ -1180,7 +1207,6 @@ namespace Meetings
         private string SetRemoveSetUpdate(List<string> usersRemoveMeeting, int AmountIn)
         {
             List<string> everyUserInMeeting = new List<string>();
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             int intAmountInMeeting = 0;
             string allUsersNames = "";
             SqlConnection cnn = new SqlConnection(ConString);
@@ -1292,7 +1318,6 @@ namespace Meetings
                     checkedItemsForLooking += item.ToString();
                 }
                 database1.SetVaidateMeetingName(checkedItemsForLooking);
-                String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
                 SqlConnection cnn = new SqlConnection(ConString);
                 try
                 {
@@ -1446,7 +1471,6 @@ namespace Meetings
                 TimesCheckedListBoxUpdate.Items.Clear();
                 MeetingTimesListUpdateBtn.Enabled = false;
                 List<string> meetingTimes = new List<string>();
-                String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
                 string publicOrNot = "";
                 SqlConnection cnn = new SqlConnection(ConString);
                 try
@@ -1526,7 +1550,6 @@ namespace Meetings
                 string Date = "";
                 String Pref = "";
                 string Excl = "";
-                String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
                 String com = "Select * from " + ViewEveryUserInMeetingsAnswer + "UsersAnswers;";
                 String com2 = "Select * from " + ViewEveryUserInMeetingsAnswer + ";";
                 SqlConnection cnn = new SqlConnection(ConString);
@@ -1651,7 +1674,6 @@ namespace Meetings
                 string name = database1.GetUpdateMeetingName(0);
                 string date = database1.GetUpdateMeetingDate(0);
                 location++;
-                String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
                 string com = "Update " + name + " set MeetingDate = '" + day + "/" + month + "/" + year + "' ;";
                 string com2 = "Update " + name + " set " + SetTimesForDatabase(maxAmoutOfHours, timesOfMeetingChange, b) + " where "+name+"id = "+ location + ";";
                 SqlConnection cnn = new SqlConnection(ConString);
@@ -1672,7 +1694,6 @@ namespace Meetings
         {
             string name = database1.GetUpdateMeetingName(0);
             List<string> dataAlreadyInMeeting = new List<string>();
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             string com = "Select * from " + name + ";";
             SqlConnection cnn = new SqlConnection(ConString);
             try
@@ -1766,7 +1787,6 @@ namespace Meetings
         }
         private void MeetingListView()
         {
-            String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
             string com = "Select * from GlobalTableList;";
             List<string> namesListInDatabase = new List<string>();
             SqlConnection cnn = new SqlConnection(ConString);
@@ -1955,7 +1975,6 @@ namespace Meetings
                         }
 
                     }
-                    String ConString = "Data Source=.\\SQLEXPRESS;Database=Meetings;Integrated Security=True";
                     string com = "Insert into "+meetingName+ " (MeetingAnswersUser,MeetingAnswersDate,MeetingAnswersPrefForDate,MeetingAnswersExcForDate) values ('"+ recip1.GetFName()+"','"+ date + "','"+ PrefListComplete + "','"+ ExListComplete + "');";
                     SqlConnection cnn = new SqlConnection(ConString);
                     try
