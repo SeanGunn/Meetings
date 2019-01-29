@@ -103,7 +103,6 @@ namespace Meetings
             Int32 count = 0;
             if (count <= 1)
             {
-                //TODO: IF public was pressed need to vaidate insertUser string or else it will be the wrong date
                 int day = dateTimePicker.Value.Day;
                 int month = dateTimePicker.Value.Month;
                 int year = dateTimePicker.Value.Year;
@@ -227,9 +226,6 @@ namespace Meetings
                             InsertPartTimesFix += "";
                             if (b != (TimesListAmount) - counter)
                                 InsertPartTimesFix += "', '";
-                            //else
-                                //MessageBox.Show(InsertPartTimesFix);
-
                         }
 
                     }
@@ -403,18 +399,16 @@ namespace Meetings
                 try
                 {
                     cnn.Open();
-                    MessageBox.Show("Open");
                     sc = new SqlCommand(insertUser, cnn);
                     sc.ExecuteNonQuery();
                     sc.Dispose();
                     cnn.Close();
-                    MessageBox.Show("Close");
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.ToString());
                 }
-                
+                MessageBox.Show("User with the username of " + Username + " was created.");
             }
             else
             {
@@ -583,7 +577,7 @@ namespace Meetings
                 {
                     MessageBox.Show(ex.Message);
                 }
-                string createPrefAndExcDatabase = "CREATE TABLE[dbo].[" + meetingsName + "UsersAnswers] (ID int IDENTITY(1,1) PRIMARY KEY, MeetingAnswersUser varchar(20), MeetingAnswersDate varchar(20), MeetingAnswersPrefForDate varchar(200), MeetingAnswersExcForDate varchar(200) );";
+                string createPrefAndExcDatabase = "CREATE TABLE[dbo].[" + meetingsName + "UsersAnswers] (ID int IDENTITY(1,1) PRIMARY KEY, MeetingAnswersUser varchar(20), MeetingAnswersDate varchar(20), MeetingAnswersPrefForDate varchar(200), MeetingAnswersExcForDate varchar(200), PrefAmount int, ExAmount int);";
                 try
                 {
                     SqlConnection cnn = new SqlConnection(ConString);
@@ -1004,6 +998,15 @@ namespace Meetings
                 using (SqlCommand com2 = new SqlCommand(command2, cnn))
                     com2.ExecuteNonQuery();
                 cnn.Close();
+                foreach (object Item in UsersCheckedListBoxUpdate.CheckedItems)
+                {
+                    string user = Item.ToString();
+                    string command3 = "DELETE from " + database1.GetRemoveMeetingName() + "UsersAnswers Where MeetingAnswersUser = '" + user + "';";
+                    cnn.Open();
+                    using (SqlCommand com3 = new SqlCommand(command3, cnn))
+                        com3.ExecuteNonQuery();
+                    cnn.Close();
+                }
                 MessageBox.Show("User removed from meeting.");
             }
             catch (Exception ex)
@@ -1339,7 +1342,7 @@ namespace Meetings
                             {
                                 maxAmoutOfHours = 14;
                             }
-                            intAmountInMeeting = oReader.GetInt32(4);
+                            intAmountInMeeting = oReader.GetInt32(5);
                             areaWeAreLooking = 6;
                             intAmountInMeeting = intAmountInMeeting + areaWeAreLooking;
                             scalar = intAmountInMeeting;
@@ -1489,9 +1492,7 @@ namespace Meetings
                         }
 
                     }
-
                     cnn.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -1545,11 +1546,17 @@ namespace Meetings
                     ViewEveryUserInMeetingsAnswer += item.ToString();
                 }
                 List<String> ListOfAnswers = new List<string>();
+                List<String> PrefConfictsList = new List<string>();
+                List<String> ExConfictsList = new List<string>();
+                string StrongPref = "";
+                string StrongEx = "";
                 string Answers = "";
                 string Name = "";
                 string Date = "";
                 String Pref = "";
                 string Excl = "";
+                int PrefAmount = 0;
+                int ExAmount = 0;
                 String com = "Select * from " + ViewEveryUserInMeetingsAnswer + "UsersAnswers;";
                 String com2 = "Select * from " + ViewEveryUserInMeetingsAnswer + ";";
                 SqlConnection cnn = new SqlConnection(ConString);
@@ -1565,10 +1572,51 @@ namespace Meetings
                             Date = oReader.GetString(2);
                             Pref = oReader.GetString(3);
                             Excl = oReader.GetString(4);
+                            PrefAmount = oReader.GetInt32(5);
+                            ExAmount = oReader.GetInt32(6);
                             Answers = "For date " + Date + ", " + Name.Trim() + "'s\nPreferences are " + Pref + " and their Exclusions are " + Excl + ".";
                             ListOfAnswers.Add(Answers);
+                            if(PrefAmount >= 1)
+                            {
+                                foreach(var a in Pref.Split(','))
+                                {
+                                    MessageBox.Show(a);
+                                    PrefConfictsList.Add(a);
+                                }
+                            }
+                            if(ExAmount>= 1)
+                            {
+                                foreach (var b in Excl.Split(','))
+                                {
+                                    ExConfictsList.Add(b);
+                                }
+                            }
+                  
                         }
                         cnn.Close();
+                        if (PrefConfictsList.Count()>1)
+                         {
+                            string[] listOfItems = PrefConfictsList.ToArray();
+                            string s = "";
+                            foreach (var sasaad in listOfItems)
+                                s += sasaad + " ";
+                            var duplicates = listOfItems
+                                .GroupBy(i => i)
+                                .Where(g => g.Count() > 1)
+                                .Select(g => g.Key);
+                            foreach (var d in duplicates)
+                                StrongPref += d + " ";
+                        }
+                        if (ExConfictsList.Count()>1)
+                        {
+                            string[] listOfItems = ExConfictsList.ToArray();
+                            var duplicates = listOfItems
+                                .GroupBy(i => i)
+                                .Where(g => g.Count() > 1)
+                                .Select(g => g.Key);
+                            foreach (var d in duplicates)
+                                StrongEx += d + " ";
+                        }
                     }
                     SqlCommand oCmd2 = new SqlCommand(com2, cnn);
                     cnn.Open();
@@ -1592,10 +1640,28 @@ namespace Meetings
                 }
                 else
                 {
+
                     foreach(string a in ListOfAnswers)
                     {
                         Output += a + "\n";
                     }
+                    if(StrongPref != "")
+                    {
+                        Output += "All the strong preferences are " + StrongPref;
+                    }
+                    else
+                    {
+                        Output += "Their are 0 strong preferences";
+                    }
+                    if(StrongEx != "")
+                    {
+                        Output += ".\nAll the strong exculusion conflicts are "+ StrongEx;
+                    }
+                    else
+                    {
+                        Output += ".\nTheir are 0 strong exculusion conflicts";
+                    }
+                    Output += ".";
                     MessageBox.Show(Output);
                     CreateUserInitBtn.Enabled = true;
                     EditMeetingsBtn.Enabled = true;
@@ -1667,15 +1733,14 @@ namespace Meetings
 
         public void UpdateMeetingTimesAndDate(List<string> timesOfMeetingChange, int day, int month, int year, int maxAmoutOfHours)
         {
-            int b = 0;
-            int location = b;
+            int b = timesOfMeetingChange.Count();
             foreach (string a in timesOfMeetingChange)
             {
                 string name = database1.GetUpdateMeetingName(0);
                 string date = database1.GetUpdateMeetingDate(0);
-                location++;
                 string com = "Update " + name + " set MeetingDate = '" + day + "/" + month + "/" + year + "' ;";
-                string com2 = "Update " + name + " set " + SetTimesForDatabase(maxAmoutOfHours, timesOfMeetingChange, b) + " where "+name+"id = "+ location + ";";
+                string com2 = "Update " + name + " set " + SetTimesForDatabase(maxAmoutOfHours, timesOfMeetingChange, b, a) + " where MeetingName = '"+name.Trim()+"';";
+                string com3 = "Delete from " + name + "UsersAnswers;";
                 SqlConnection cnn = new SqlConnection(ConString);
                 cnn.Open();
                 using (SqlCommand command = new SqlCommand(com, cnn))
@@ -1685,13 +1750,16 @@ namespace Meetings
                 using (SqlCommand command2 = new SqlCommand(com2, cnn))
                     command2.ExecuteNonQuery();
                 cnn.Close();
-                
-                b++;
+                cnn.Open();
+                using (SqlCommand command3 = new SqlCommand(com3, cnn))
+                    command3.ExecuteNonQuery();
+                cnn.Close();
             }
             MessageBox.Show("Meetings times and dates been updated");
         }
-        private string SetTimesForDatabase(int maxAmoutOfHours, List<string> timesOfMeetingChange, int b)
+        private string SetTimesForDatabase(int maxAmoutOfHours, List<string> timesOfMeetingChange, int b, string newTime)
         {
+            MessageBox.Show(timesOfMeetingChange.Count.ToString());
             string name = database1.GetUpdateMeetingName(0);
             List<string> dataAlreadyInMeeting = new List<string>();
             string com = "Select * from " + name + ";";
@@ -1723,48 +1791,55 @@ namespace Meetings
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+            }string sample = "";
+            List<string> timesWeUsing = new List<string>();
+            foreach(var a in timesOfMeetingChange)
+            {
+                sample += a + " ";
+                timesWeUsing.Add(a);
             }
             string ba = "";
             int ifMoreThan1user = 0;
             int counter = 0;
-            //TODO: FIX
             int positionOfUser = 0;
             List<string> TimesCheckedListList = new List<string>();
             foreach (object item in TimesCheckedListBoxUpdate.Items)
             {
                 TimesCheckedListList.Add(item.ToString());
             }
-
-            foreach (string users in timesOfMeetingChange)
-            {
+            int counter2 = 0;
                 while (counter < maxAmoutOfHours)
                 {
 
-                    if (TimesCheckedListList.ElementAt(positionOfUser).Equals(users) && (timesOfMeetingChange.Count == 1))
+                    if (sample.Contains(TimesCheckedListList.ElementAt(positionOfUser)))
                     {
                         int a = positionOfUser + 1;
+                        int f = positionOfUser - 1;
                         ++ifMoreThan1user;
                         if (ifMoreThan1user == 1)
                         {
-                            ba += "TimeOfMeetings" + a + "= '" + users + "'";
+                            ba += "TimeOfMeetings" + a + "= '" + timesWeUsing.ElementAt(counter2) + "'";
                         }
                         else
                         {
-                            ba += ", TimeOfMeetings" + a + "= '" + users + "'";
+                            ba += ", TimeOfMeetings" + a + "= '" + timesWeUsing.ElementAt(counter2) + "'";
                         }
+                    ++counter2;
                     }
-                    else if ((timesOfMeetingChange.Count > 1) && (TimesCheckedListList.ElementAt(positionOfUser).Equals(users)))
+                    else if ((timesOfMeetingChange.Count > 1) && sample.Contains(TimesCheckedListList.ElementAt(positionOfUser)))
                     {
                         int a = positionOfUser + 1;
+                        int f = positionOfUser - 1;
                         ++ifMoreThan1user;
                         if (ifMoreThan1user == 1)
                         {
-                            ba += "TimeOfMeetings" + a + "= '" + users + "'";
+                            ba += "TimeOfMeetings" + a + "= '" + timesWeUsing.ElementAt(counter2) + "'";
                         }
                         else
                         {
-                            ba += ", TimeOfMeetings" + a + "= '" + users + "'";
+                            ba += ", TimeOfMeetings" + a + "= '" + timesWeUsing.ElementAt(counter2) + "'";
                         }
+                    ++counter2;
                     }
                     else
                     {
@@ -1782,7 +1857,6 @@ namespace Meetings
                     counter++;
                     positionOfUser++;
                 }
-            }
             return ba;
         }
         private void MeetingListView()
@@ -1975,7 +2049,9 @@ namespace Meetings
                         }
 
                     }
-                    string com = "Insert into "+meetingName+ " (MeetingAnswersUser,MeetingAnswersDate,MeetingAnswersPrefForDate,MeetingAnswersExcForDate) values ('"+ recip1.GetFName()+"','"+ date + "','"+ PrefListComplete + "','"+ ExListComplete + "');";
+                    int PrefCount = PrefCheckedListBox.CheckedItems.Count;
+                    int ExCount = ExCheckedListBox.CheckedItems.Count;
+                    string com = "Insert into "+meetingName+ " (MeetingAnswersUser,MeetingAnswersDate,MeetingAnswersPrefForDate,MeetingAnswersExcForDate,PrefAmount, ExAmount ) values ('" + recip1.GetFName()+"','"+ date + "','"+ PrefListComplete + "','"+ ExListComplete + "','"+ PrefCount+"','"+ ExCount + "'); ";
                     SqlConnection cnn = new SqlConnection(ConString);
                     try
                     {
@@ -2089,30 +2165,31 @@ namespace Meetings
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            newUsernamelabel.Enabled = true;
-            newUsernameTxtbox.Enabled = true;
-            newPasswordLabel.Enabled = true;
-            newFirstnameTxtbox.Enabled = true;
-            newFirstnameLabel.Enabled = true;
-            newLastnameTxtbox.Enabled = true;
-            newLastnameLabel.Enabled = true;
-            newPasswordTxtbox.Enabled = true;
-            newEmailLabel.Enabled = true;
-            newEmailTxtbox.Enabled = true;
-            newUserBtn.Enabled = true;
+                newUsernamelabel.Enabled = true;
+                newUsernameTxtbox.Enabled = true;
+                newPasswordLabel.Enabled = true;
+                newFirstnameTxtbox.Enabled = true;
+                newFirstnameLabel.Enabled = true;
+                newLastnameTxtbox.Enabled = true;
+                newLastnameLabel.Enabled = true;
+                newPasswordTxtbox.Enabled = true;
+                newEmailLabel.Enabled = true;
+                newEmailTxtbox.Enabled = true;
+                newUserBtn.Enabled = true;
 
-            newUsernamelabel.Visible = true;
-            newUsernameTxtbox.Visible = true;
-            newPasswordLabel.Visible = true;
-            newFirstnameTxtbox.Visible = true;
-            newFirstnameLabel.Visible = true;
-            newLastnameLabel.Visible = true;
-            newLastnameTxtbox.Visible = true;
-            newLastnameLabel.Visible = true;
-            newPasswordTxtbox.Visible = true;
-            newEmailLabel.Visible = true;
-            newEmailTxtbox.Visible = true;
-            newUserBtn.Visible = true;
+                newUsernamelabel.Visible = true;
+                newUsernameTxtbox.Visible = true;
+                newPasswordLabel.Visible = true;
+                newFirstnameTxtbox.Visible = true;
+                newFirstnameLabel.Visible = true;
+                newLastnameLabel.Visible = true;
+                newLastnameTxtbox.Visible = true;
+                newLastnameLabel.Visible = true;
+                newPasswordTxtbox.Visible = true;
+                newEmailLabel.Visible = true;
+                newEmailTxtbox.Visible = true;
+                newUserBtn.Visible = true;
+
         }
 
         private void button3_Click(object sender, EventArgs e)
