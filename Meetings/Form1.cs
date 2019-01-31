@@ -1040,6 +1040,11 @@ namespace Meetings
                     using (SqlCommand com4 = new SqlCommand(command4, cnn))
                         com4.ExecuteNonQuery();
                     cnn.Close();
+                    string command5 = "delete from GlobalTableList where MeetingName = '" + database1.GetRemoveMeetingName() + "';";
+                    cnn.Open();
+                    using (SqlCommand com5 = new SqlCommand(command5, cnn))
+                        com5.ExecuteNonQuery();
+                    cnn.Close();
                     MessageBox.Show("Meeting canceled because their isn't enough people.");
                 }
             }
