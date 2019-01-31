@@ -54,8 +54,8 @@ namespace Meetings
                        WHERE TABLE_NAME='GlobalTableList') SELECT 1 ELSE SELECT 0";
             string cmdText2 = @"IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES 
                        WHERE TABLE_NAME='MeetingsDatabase') SELECT 1 ELSE SELECT 0";
-            string command = "CREATE TABLE GlobalTableList (GlobalTableID int IDENTITY(1,1) PRIMARY KEY,MeetingOwner varchar(20), MeetingName varchar(20), Users varchar(100), MeetingPrefAndExDatabaseName varchar(100));";
-            string command2 = "CREATE TABLE MeetingsDatabase (UserID int IDENTITY(1,1) PRIMARY KEY,Username varchar(20), FirstName varchar(20), Surname varchar(20), Password varchar(20), Email varchar(20));";
+            string command = "CREATE TABLE GlobalTableList (GlobalTableID int IDENTITY(1,1) PRIMARY KEY,MeetingOwner varchar(200), MeetingName varchar(200), Users varchar(200), MeetingPrefAndExDatabaseName varchar(200));";
+            string command2 = "CREATE TABLE MeetingsDatabase (UserID int IDENTITY(1,1) PRIMARY KEY,Username varchar(200), FirstName varchar(200), Surname varchar(20), Password varchar(200), Email varchar(200));";
             using (SqlConnection con = new SqlConnection(ConString))
             {
 
@@ -67,7 +67,6 @@ namespace Meetings
                     int x = Convert.ToInt32(GlobalTableListCheck.ExecuteScalar());
                     if (x == 0)
                     {
-                        MessageBox.Show("AAAA");
                         using (SqlCommand com = new SqlCommand(command, con))
                             com.ExecuteNonQuery();
                     }
@@ -77,7 +76,6 @@ namespace Meetings
                     int y = Convert.ToInt32(MeetingsDatabaseCheck.ExecuteScalar());
                     if (y == 0)
                     {
-                        MessageBox.Show("BBBB");
                         using (SqlCommand com2 = new SqlCommand(command2, con))
                             com2.ExecuteNonQuery();
                     }
@@ -536,7 +534,7 @@ namespace Meetings
                         MessageBox.Show("Meeting called " + meetingsName + " is being set");
                         try
                         {
-                            String insertMeetingsPart1 = "CREATE TABLE[dbo].[" + meetingsName + "] (" + meetingsName + "ID int IDENTITY(1,1) PRIMARY KEY, MeetingName varchar(20), MeetingDate varchar(20), MeetingOwner varchar(20), AmountInMeeting INT,MaxPossiableUsers int, IsTheMeetingPublic varchar(20),";
+                            String insertMeetingsPart1 = "CREATE TABLE[dbo].[" + meetingsName + "] (" + meetingsName + "ID int IDENTITY(1,1) PRIMARY KEY, MeetingName varchar(200), MeetingDate varchar(200), MeetingOwner varchar(200), AmountInMeeting INT,MaxPossiableUsers int, IsTheMeetingPublic varchar(200),";
                             String insertMeetingsPart2 = "";
                             String user = "UsersInMeeting";
                             String insertMeetingsPart3 = "";
@@ -546,7 +544,7 @@ namespace Meetings
                             {
                                 a = i + 1;
                                 insertMeetingsPart2 += "" + user + a;
-                                insertMeetingsPart2 += " varchar(20)";
+                                insertMeetingsPart2 += " varchar(200)";
                                 insertMeetingsPart2 += ",";
                             }
                             a = 0;
@@ -554,7 +552,7 @@ namespace Meetings
                             {
                                 a = i + 1;
                                 insertMeetingsPart3 += "" + time + a;
-                                insertMeetingsPart3 += " varchar(20)";
+                                insertMeetingsPart3 += " varchar(200)";
                                 if (a != TimesCheckedListBox.Items.Count)
                                     insertMeetingsPart3 += ",";
                                 else
@@ -580,7 +578,7 @@ namespace Meetings
                 {
                     MessageBox.Show(ex.Message);
                 }
-                string createPrefAndExcDatabase = "CREATE TABLE[dbo].[" + meetingsName + "UsersAnswers] (ID int IDENTITY(1,1) PRIMARY KEY, MeetingAnswersUser varchar(20), MeetingAnswersDate varchar(20), MeetingAnswersPrefForDate varchar(200), MeetingAnswersExcForDate varchar(200), PrefAmount int, ExAmount int);";
+                string createPrefAndExcDatabase = "CREATE TABLE[dbo].[" + meetingsName + "UsersAnswers] (ID int IDENTITY(1,1) PRIMARY KEY, MeetingAnswersUser varchar(200), MeetingAnswersDate varchar(200), MeetingAnswersPrefForDate varchar(200), MeetingAnswersExcForDate varchar(200), PrefAmount int, ExAmount int);";
                 try
                 {
                     SqlConnection cnn = new SqlConnection(ConString);
@@ -780,12 +778,6 @@ namespace Meetings
             else
             {
                 AllYourMeetingsUsersList(usersInThatMeeting, usersDistiant);
-                foreach (string b in usersInThatMeeting)
-                {
-                    MessageBox.Show(b);
-                }
-                MessageBox.Show(usersInThatMeeting.Count.ToString());
-
                 UsersInMeetingTransferBtn.Visible = false;
                 UsersInMeetingTransferBtn.Enabled = false;
                 UsersCheckedListBoxUpdate.Enabled = true;
@@ -1016,6 +1008,45 @@ namespace Meetings
             {
                 MessageBox.Show(ex.ToString());
             }
+            int compareForDrop = 0;
+            bool dropTables = false;
+            SqlConnection cnn2 = new SqlConnection(ConString);
+            try
+            {
+                String command = "Select * from " + database1.GetRemoveMeetingName() + ";";
+                SqlCommand oCmd = new SqlCommand(command, cnn);
+                cnn.Open();
+                using (SqlDataReader oReader = oCmd.ExecuteReader())
+                {
+                    while (oReader.Read())
+                    {
+                        intAmountInMeeting = oReader.GetInt32(4);
+                    }
+                    cnn.Close();
+                }
+                if(compareForDrop == intAmountInMeeting)
+                {
+                    dropTables = true;
+                }
+                if(dropTables == true)
+                {
+                    string command3 = "Drop table " + database1.GetRemoveMeetingName() + ";";
+                    cnn.Open();
+                    using (SqlCommand com3 = new SqlCommand(command3, cnn))
+                        com3.ExecuteNonQuery();
+                    cnn.Close();
+                    cnn.Open();
+                    string command4 = "Drop table " + database1.GetRemoveMeetingName() + "UsersAnswers;";
+                    using (SqlCommand com4 = new SqlCommand(command4, cnn))
+                        com4.ExecuteNonQuery();
+                    cnn.Close();
+                    MessageBox.Show("Meeting canceled because their isn't enough people.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
             UsersCheckedListBox.ClearSelected();
             foreach (int i in TimesCheckedListBox.CheckedIndices)
             {
@@ -1135,7 +1166,23 @@ namespace Meetings
             {
                 maxAmoutOfHours = 14;
             }
-            UpdateMeetingTimesAndDate(timesOfMeetingChange, day, month, year, maxAmoutOfHours);
+            bool tryAgain = false;
+            if (database1.GetPublic() == "true")
+            {
+                if (dateTimePickerUpdate.Value.DayOfWeek == DayOfWeek.Saturday)
+                    tryAgain = true;
+                if (dateTimePickerUpdate.Value.DayOfWeek == DayOfWeek.Sunday)
+                    tryAgain = true;
+            }
+            if(tryAgain == true)
+            {
+                MessageBox.Show("Pick a weekday for public meetings.");
+            }
+            else
+            {
+                UpdateMeetingTimesAndDate(timesOfMeetingChange, day, month, year, maxAmoutOfHours);
+            }
+           
             TimesCheckedListBoxUpdate.Items.Clear();
             database1.ClearUpdateMeetingDate();
             database1.ClearUpdateMeetingName();
@@ -1761,7 +1808,6 @@ namespace Meetings
         }
         private string SetTimesForDatabase(int maxAmoutOfHours, List<string> timesOfMeetingChange, int b, string newTime)
         {
-            MessageBox.Show(timesOfMeetingChange.Count.ToString());
             string name = database1.GetUpdateMeetingName(0);
             List<string> dataAlreadyInMeeting = new List<string>();
             string com = "Select * from " + name + ";";

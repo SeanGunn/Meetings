@@ -15,7 +15,6 @@ namespace Meetings
         private List<string> UpdateMeetingDate = new List<string>();
         private string Public = "false";
         private List<string> UpdateMeetingName = new List<string>();
-        string a = "";
         private string VaidateMeetingName;
         private string VaidateMeetingDate;
         public Database(string Name)
