@@ -1257,9 +1257,78 @@ namespace Meetings
             PrefExclVaidateBtn.Visible = false;
         }
 
-        private void RemoveSelfMeetingBtn_Click(object sender, EventArgs e)
+        private string SetRemoveTextForDropOut(string usersName, int AmountIn, string meetingName)
         {
-            //TODO: Reads the users name then removes from the meeting have it donr last since i need to set up the recip first
+            List<string> everyUserInMeeting = new List<string>();
+            int intAmountInMeeting = 0;
+            string allUsersNames = "";
+            SqlConnection cnn = new SqlConnection(ConString);
+            try
+            {
+                String command = "Select * from " + meetingName + ";";
+                SqlCommand oCmd = new SqlCommand(command, cnn);
+                cnn.Open();
+                using (SqlDataReader oReader = oCmd.ExecuteReader())
+                {
+                    int aba = 0;
+                    int stringNamesStart = 7;
+                    while (oReader.Read())
+                    {
+                        intAmountInMeeting = oReader.GetInt32(4);
+                        while (aba < intAmountInMeeting)
+                        {
+                            allUsersNames = oReader.GetString(stringNamesStart);
+                            if (allUsersNames == "")
+                            {
+                                everyUserInMeeting.Add(stringNamesStart.ToString());
+                            }
+                            else
+                            {
+                                everyUserInMeeting.Add(allUsersNames);
+                                aba++;
+                            }
+                            stringNamesStart++;
+
+                        }
+
+                    }
+                    string mm = "";
+                    foreach (string m in everyUserInMeeting)
+                    {
+                        mm += m + "";
+                    }
+                    cnn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            string b = "";
+            int ifMoreThan1user = 0;
+            int positionOfUser = 0;
+            string users = recip1.GetFName() + " " + recip1.GetLName();
+            int maxUsersInMeeting = everyUserInMeeting.Count;
+            int counter = 0;
+                while (counter < maxUsersInMeeting)
+                {
+                    if  (everyUserInMeeting.ElementAt(positionOfUser).ToString().Equals(users))
+                    {
+                        int a = positionOfUser + 1;
+                        ++ifMoreThan1user;
+                        if (ifMoreThan1user == 1)
+                        {
+                            b += "UsersInMeeting" + a + "= ''";
+                        }
+                        else
+                        {
+                            b += ", UsersInMeeting" + a + "= ''";
+                        }
+                    }
+                    ++positionOfUser;
+                    counter++;
+                }
+            return b;
         }
 
         private string SetRemoveSetUpdate(List<string> usersRemoveMeeting, int AmountIn)
@@ -1347,6 +1416,8 @@ namespace Meetings
 
         private void PefenAndExclTimesBtn_Click(object sender, EventArgs e)
         {
+            PrefCheckedListBox.Items.Clear();
+            ExCheckedListBox.Items.Clear();
             List<string> ListOfTimes = new List<string>();
             List<string> TimesDistiant = new List<string>();
             List<string> TimesRemovedNoString = new List<string>();
@@ -1445,6 +1516,8 @@ namespace Meetings
         private void CreateUserInitBtn_Click(object sender, EventArgs e)
         {
             init1 = new Init(user1.GetUsername(), user1.GetFName(), user1.GetLName(), user1.GetPassword(), user1.GetEmail());
+            button4.Visible = false;
+            button4.Enabled = false;
             CreateUserInitBtn.Visible = false;
             CreateUserInitBtn.Enabled = false;
             EditMeetingsBtn.Visible = false;
@@ -1464,7 +1537,10 @@ namespace Meetings
         private void CreateUserRecipBtn_Click(object sender, EventArgs e)
         {
             init1 = new Init(user1.GetUsername(), user1.GetFName(), user1.GetLName(), user1.GetPassword(), user1.GetEmail());
+            CheckedListBoxMeetingsList.Items.Clear();
             MeetingList();
+            button4.Visible = false;
+            button4.Enabled = false;
             CreateUserInitBtn.Visible = false;
             CreateUserInitBtn.Enabled = false;
             EditMeetingsBtn.Visible = false;
@@ -1486,7 +1562,10 @@ namespace Meetings
         private void EditMeetingsBtn_Click(object sender, EventArgs e)
         {
             init1 = new Init(user1.GetUsername(), user1.GetFName(), user1.GetLName(), user1.GetPassword(), user1.GetEmail());
+            CheckedListBoxMeetingsList.Items.Clear();
             MeetingList();
+            button4.Enabled = false;
+            button4.Visible = false;
             CreateUserInitBtn.Visible = false;
             CreateUserInitBtn.Enabled = false;
             EditMeetingsBtn.Visible = false;
@@ -1955,6 +2034,8 @@ namespace Meetings
         {
             init1 = new Init("", "", "", "", "");
             recip1 = new Recip("", "", "", "", "");
+            button4.Enabled = false;
+            button4.Visible = false;
             UserNameLabel.Visible = true;
             UserNameLabel.Enabled = true;
             UserNameTxtbox.Enabled = true;
@@ -2198,7 +2279,10 @@ namespace Meetings
         private void Button1_Click(object sender, EventArgs e)
         {
             recip1 = new Recip(user1.GetUsername(), user1.GetFName(), user1.GetLName(), user1.GetPassword(), user1.GetEmail());
+            CheckedListBoxMeetingsList.Items.Clear();
             MeetingListView();
+            button4.Enabled = true;
+            button4.Visible = true;
             CreateUserInitBtn.Visible = false;
             CreateUserInitBtn.Enabled = false;
             EditMeetingsBtn.Visible = false;
@@ -2248,6 +2332,8 @@ namespace Meetings
 
         private void button3_Click(object sender, EventArgs e)
         {
+            button4.Visible = false;
+            button4.Enabled = false;
             TimesCheckedListBox.Visible = false;
             TimesCheckedListBox.Enabled = false;
             CreateUserInitBtn.Enabled = true;
@@ -2314,6 +2400,181 @@ namespace Meetings
             ExCheckedListBox.Enabled = false;
             PrefExclVaidateBtn.Enabled = false;
             PrefExclVaidateBtn.Visible = false;
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            List<string> meetingList = new List<string>();
+            foreach (var a in CheckedListBoxMeetingsList.CheckedItems)
+            {
+                meetingList.Add(a.ToString());
+            }
+            int intAmountInMeeting = 0;
+            int amountIn = 0;
+            if (CheckedListBoxMeetingsList.CheckedItems.Count < 1)
+            {
+                MessageBox.Show("Pick a meeting you want to dropout off.");
+            }
+            else
+            {
+                foreach (string meetingName in meetingList)
+                {
+                    string com = "Update " + meetingName + " set ;";
+
+                    SqlConnection cnn = new SqlConnection(ConString);
+                    try
+                    {
+                        String command = "Select * from " + meetingName + ";";
+                        SqlCommand oCmd = new SqlCommand(command, cnn);
+                        cnn.Open();
+                        using (SqlDataReader oReader = oCmd.ExecuteReader())
+                        {
+                            while (oReader.Read())
+                            {
+                                intAmountInMeeting = oReader.GetInt32(4);
+                            }
+                            cnn.Close();
+                        }
+                        string command2 = "UPDATE " + meetingName + " SET " + SetRemoveTextForDropOut(recip1.GetFullName(), amountIn, meetingName) + ", AmountInMeeting = '" + (intAmountInMeeting - 1) + "';";
+                        MessageBox.Show(command2);
+                        cnn.Open();
+                        using (SqlCommand com2 = new SqlCommand(command2, cnn))
+                            com2.ExecuteNonQuery();
+                        cnn.Close();
+                        foreach (object Item in UsersCheckedListBoxUpdate.CheckedItems)
+                        {
+                            string user = Item.ToString();
+                            string command3 = "DELETE from " + meetingName + "UsersAnswers Where MeetingAnswersUser = '" + user + "';";
+                            cnn.Open();
+                            using (SqlCommand com3 = new SqlCommand(command3, cnn))
+                                com3.ExecuteNonQuery();
+                            cnn.Close();
+                        }
+                        MessageBox.Show("User removed from meeting.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                    int compareForDrop = 0;
+                    bool dropTables = false;
+                    SqlConnection cnn2 = new SqlConnection(ConString);
+                    try
+                    {
+                        String command = "Select * from " + meetingName + ";";
+                        SqlCommand oCmd = new SqlCommand(command, cnn);
+                        cnn.Open();
+                        using (SqlDataReader oReader = oCmd.ExecuteReader())
+                        {
+                            while (oReader.Read())
+                            {
+                                intAmountInMeeting = oReader.GetInt32(4);
+                            }
+                            cnn.Close();
+                        }
+                        if (compareForDrop == intAmountInMeeting)
+                        {
+                            dropTables = true;
+                        }
+                        if (dropTables == true)
+                        {
+                            string command3 = "Drop table " + meetingName + ";";
+                            cnn.Open();
+                            using (SqlCommand com3 = new SqlCommand(command3, cnn))
+                                com3.ExecuteNonQuery();
+                            cnn.Close();
+                            cnn.Open();
+                            string command4 = "Drop table " + meetingName + "UsersAnswers;";
+                            using (SqlCommand com4 = new SqlCommand(command4, cnn))
+                                com4.ExecuteNonQuery();
+                            cnn.Close();
+                            string command5 = "delete from GlobalTableList where MeetingName = '" + meetingName + "';";
+                            cnn.Open();
+                            using (SqlCommand com5 = new SqlCommand(command5, cnn))
+                                com5.ExecuteNonQuery();
+                            cnn.Close();
+                            MessageBox.Show("Meeting canceled because their isn't enough people.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                }
+                button4.Visible = true;
+                button4.Enabled = true;
+                TimesCheckedListBox.Visible = false;
+                TimesCheckedListBox.Enabled = false;
+                CreateUserInitBtn.Enabled = false;
+                EditMeetingsBtn.Enabled =  false;
+                CreateUserRecipBtn.Enabled = false;
+                button1.Enabled = true;
+                button1.Visible = true;
+                CreateUserInitBtn.Visible = false;
+                EditMeetingsBtn.Visible = false;
+                CreateUserRecipBtn.Visible = false;
+                button3.Enabled = false;
+                button3.Visible = false;
+                publicBtn.Visible = false;
+                publicBtn.Enabled = false;
+                privateBtn.Visible = false;
+                privateBtn.Enabled = false;
+                createMeetingsNameLabel.Enabled = false;
+                createMeetingsNameLabel.Visible = false;
+                createMeetingsNameTxtBox.Visible = false;
+                createMeetingsNameTxtBox.Enabled = false;
+                createMeetingsNameBtn.Enabled = false;
+                createMeetingsNameBtn.Visible = false;
+                dateTimePicker.Visible = false;
+                dateTimePicker.Enabled = false;
+                UsersCheckedListBox.Enabled = false;
+                UsersCheckedListBox.Visible = false;
+                DatePickerbtn.Visible = false;
+                DatePickerbtn.Enabled = false;
+                label2.Enabled = false;
+                label2.Visible = false;
+                CheckedListBoxMeetingsList.Enabled = false;
+                CheckedListBoxMeetingsList.Visible = false;
+                UsersInMeetingTransferBtn.Enabled = false;
+                UsersInMeetingTransferBtn.Visible = false;
+                UsersCheckedListBoxUpdate.Visible = false;
+                UsersCheckedListBoxUpdate.Enabled = false;
+                UpdateRemovedUsersBtn.Enabled = false;
+                UpdateRemovedUsersBtn.Visible = false;
+                UpdateDateTimeBtn.Enabled = false;
+                UpdateDateTimeBtn.Visible = false;
+                meetingTimesListBox.Visible = false;
+                meetingTimesListBox.Enabled = false;
+                MeetingTimesListUpdateBtn.Enabled = false;
+                MeetingTimesListUpdateBtn.Visible = false;
+                dateTimePickerUpdate.Enabled = false;
+                dateTimePickerUpdate.Visible = false;
+                TimesCheckedListBoxUpdate.Enabled = false;
+                TimesCheckedListBoxUpdate.Visible = false;
+                UpdateTimesAndDataBtn.Enabled = false;
+                UpdateTimesAndDataBtn.Visible = false;
+                cancelAMeetingBtn.Enabled = false;
+                cancelAMeetingBtn.Visible = false;
+                ViewUsersPrefAndExclBtn.Visible = false;
+                ViewUsersPrefAndExclBtn.Enabled = false;
+                PefenAndExclTimesBtn.Enabled = true;
+                PefenAndExclTimesBtn.Visible = true;
+                label1.Enabled = false;
+                label1.Visible = false;
+                label3.Enabled = false;
+                label3.Visible = false;
+                PrefCheckedListBox.Visible = false;
+                PrefCheckedListBox.Enabled = false;
+                ExCheckedListBox.Visible = false;
+                ExCheckedListBox.Enabled = false;
+                PrefExclVaidateBtn.Enabled = false;
+                PrefExclVaidateBtn.Visible = false;
+            }
+            CheckedListBoxMeetingsList.Items.Clear();
+            MeetingListView();
+            PrefCheckedListBox.Items.Clear();
+            ExCheckedListBox.Items.Clear();
+            //TODO: Reads the users name then removes from the meeting have it donr last since i need to set up the recip first
         }
     }
 
